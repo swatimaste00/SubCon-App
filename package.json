@@ -1,0 +1,51 @@
+{
+  "name": "SubCon-App",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap-cloud-sdk/connectivity": "^3.17.0",
+    "@sap-cloud-sdk/core": "^1.54.2",
+    "@sap-cloud-sdk/http-client": "^3.17.0",
+    "@sap-cloud-sdk/resilience": "^3.17.0",
+    "@sap/cds": "^7",
+    "@sap/cds-hana": "^2",
+    "@sap/xssec": "^3",
+    "express": "^4"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^1",
+    "@sap/cds-dk": "^7"
+  },
+  "scripts": {
+    "start": "cds-serve"
+  },
+  "cds": {
+    "requires": {
+      "[production]": {
+        "db": "hana",
+        "auth": "dummy"
+      },
+      "PLANTDETAILS": {
+        "kind": "odata",
+        "credentials": {
+          "destination": "S4-Z_SUBC_PLANT_C_CDS",
+          "path": ""
+        }
+      },
+      "API_PRODUCT_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/API_PRODUCT_SRV"
+      },
+      "metadata": {
+        "kind": "odata-v2",
+        "model": "srv/external/metadata",
+        "credentials": {
+          "destination": "S4-Z_SUBC_PLANT_C_CDS"
+        }
+      }
+    }
+  }
+}

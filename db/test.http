@@ -1,0 +1,93 @@
+### Test: Add a Material to Cart
+
+# Ensure the material with the given code exists in the Materials entity
+GET https://gamification-qga2hkdu-dev-subcon-app-srv.cfapps.eu20.hana.ondemand.com/cart/Materials?$filter=code eq 'M2'
+
+### Add Material to Cart
+POST http://localhost:4004/cart/requestMaterial
+Content-Type: application/json
+
+
+
+{
+    "materialCode": "M3",
+    "quantity" : "1",
+    "projectCode": "p001",
+    "wbsNo":"E00001",
+    "plant" : "plant1"
+    
+}
+
+###
+POST https://gamification-qga2hkdu-dev-subcon-app-srv.cfapps.eu20.hana.ondemand.com/cart/clearCart
+Content-Type: application/json
+
+
+
+{
+    
+}
+     
+
+### Check if the material has been added to MaterialRequisitions
+GET https://gamification-qga2hkdu-dev-subcon-app-srv.cfapps.eu20.hana.ondemand.com/cart/MaterialRequisitions
+
+###
+GET  http://localhost:4004/cart/MaterialRequisitions
+
+### Add Item to Cart
+POST http://localhost:4004/cart/requestMaterial
+Content-Type: application/json
+
+{
+  "materialCode": "M1",
+  "quantity": "5",
+  "wbsNo": "WBS001",
+  "projectCode": "P001",
+  "plant": "Plant001"
+}
+
+### Add Another Item to Cart
+POST http://localhost:4004/cart/requestMaterial
+Content-Type: application/json
+
+{
+  "materialCode": "M2",
+  "quantity": "10",
+  "wbsNo": "WBS002",
+  "projectCode": "P002",
+  "plant": "Plant002"
+}
+
+### Place Order
+POST https://gamification-qga2hkdu-dev-subcon-app-srv.cfapps.eu20.hana.ondemand.com/cart/placeOrder
+Content-Type: application/json
+
+{}
+
+### Retrieve Orders
+GET https://gamification-qga2hkdu-dev-subcon-app-srv.cfapps.eu20.hana.ondemand.com/cart/Orders
+
+### Retrieve Order Items
+GET https://gamification-qga2hkdu-dev-subcon-app-srv.cfapps.eu20.hana.ondemand.com/cart/OrderItems
+
+###
+GET https://api.twitter.com/2/tweets/search/recent?query=from:maste_swati%20SAPInsideTrack%20-is:retweet
+Authorization: Bearer AAAAAAAAAAAAAAAAAAAAAK7DhwEAAAAAVlZzdb%2BeoTqPFVg8w6ub9PKpS9E%3DKNUe38NRs2E5krVgWNHOXbbGxkFghsAjJ1WvG7vT2b57637xv6
+
+###
+### Get Recent Tweets by User and Tag
+GET https://api.twitter.com/2/tweets/search/recent?query=from:maste_swati%20SAPInsideTrack%20-is:retweet
+Authorization: 'Bearer AAAAAAAAAAAAAAAAAAAAAK7DhwEAAAAAWPiEGMLY1%2FimHUDqOvi1TLihij8%3DEOdX8RBNPvu1gme6xx30RNieONZzrX1qHjllsYKVX0bk3OnTMT'
+Content-Type: application/json
+
+###
+POST https://api.twitter.com/oauth2/token
+Authorization: Basic ie88LJA9wSoE6HZzKcGItEomc:0SrG6asc1Lgbx9PAZtI5Mmzuhm2atjrUiiIEvGzpnn62AhvE0X
+Content-Type: application/x-www-form-urlencoded;charset=UTF-8
+
+grant_type=client_credentials
+
+
+### You can add more requests below for different endpoints or parameters
+AAAAAAAAAAAAAAAAAAAAAK7DhwEAAAAAWPiEGMLY1%2FimHUDqOvi1TLihij8%3DEOdX8RBNPvu1gme6xx30RNieONZzrX1qHjllsYKVX0bk3OnTMT
