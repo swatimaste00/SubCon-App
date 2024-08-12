@@ -10,6 +10,7 @@
     "@sap-cloud-sdk/core": "^1.54.2",
     "@sap-cloud-sdk/http-client": "^3.17.0",
     "@sap-cloud-sdk/resilience": "^3.17.0",
+    "@sap-cloud-sdk/openapi": "^3.18.0",
     "@sap/cds": "^7",
     "@sap/cds-hana": "^2",
     "@sap/xssec": "^3",
@@ -17,6 +18,7 @@
   },
   "devDependencies": {
     "@cap-js/sqlite": "^1",
+    "@sap-cloud-sdk/openapi-generator": "^3.18.0",
     "@sap/cds-dk": "^7"
   },
   "scripts": {
@@ -44,6 +46,30 @@
         "model": "srv/external/metadata",
         "credentials": {
           "destination": "S4-Z_SUBC_PLANT_C_CDS"
+        }
+      },
+      "Z_SUBC_PLANT_C_CDS": {
+        "kind": "odata-v2",
+        "model": "srv/external/Z_SUBC_PLANT_C_CDS",
+        "credentials": {
+          "destination": "kuok-subcontract-router",
+          "path": "/backend/sap/opu/odata/sap/Z_SUBC_PLANT_C_CDS"
+        }
+      },
+      "Z_SUBC_PROJ_C_CDS": {
+        "kind": "odata-v2",
+        "model": "srv/external/Z_SUBC_PROJ_C_CDS",
+        "credentials": {
+          "destination": "kuok-subcontract-router",
+          "path": "/backend/sap/opu/odata/sap/Z_SUBC_PROJ_C_CDS"
+        }
+      },
+      "Z_SUBC_WBS_C_CDS": {
+        "kind": "odata-v2",
+        "model": "srv/external/Z_SUBC_WBS_C_CDS",
+        "credentials": {
+          "destination": "kuok-subcontract-router",
+          "path": "/backend/sap/opu/odata/sap/Z_SUBC_WBS_C_CDS"
         }
       }
     }

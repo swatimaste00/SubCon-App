@@ -1,28 +1,86 @@
 const cds = require('@sap/cds');
+const utilitySBPA = require("./utils/utilitySBPA");
+const { uuid } = cds.utils;
 
 module.exports = async function () {
 
   const db = await cds.connect.to('db'); // connect to database service
-  const { Materials, MaterialRequisitions ,Orders,OrderItems, Z_SUBC_PLANT_C } = db.entities; // get reflected definitions
+  const { Materials, MaterialRequisitions ,Orders,OrderItems, Z_SUBC_PLANT_C,MRApprovals,Plants,Projects,WBSElements } = cds.entities; // get reflected definitions
 
   const externalService = await cds.connect.to('PLANTDETAILS');
 
-  this.on(["READ"], [Z_SUBC_PLANT_C], async (req) => {
-    const apiS4ProudctSrv = await cds.connect.to('metadata');
-    return await apiS4ProudctSrv.run(req.query);
+  // this.on(['READ','GET'], `Plants`, async (req) => {
+  //   const apiS4ProudctSrv = await cds.connect.to('Z_SUBC_PLANT_C_CDS');
+  //   let response =  await apiS4ProudctSrv.send(SELECT.from('Z_SUBC_PLANT_C'));
+  //   console.log(JSON.stringify(response))
+  //   let response2 = [];
+
+  // });
+
+  this.on('READ', 'Plants', async (req) => {
+    const apiS4Srv = await cds.connect.to("Z_SUBC_PLANT_C_CDS");
+    let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_PLANT_C' });
+  
+    // Transform the response to map werks -> code and name1 -> name
+    const transformedData = response.map(item => ({
+      code: item.werks,
+      name: item.name1
+    }));
+  
+    console.log('transformedData',transformedData);
+  
+    // Insert the transformed data into the Plants entity
+    //await INSERT.into(Plants).entries(transformedData);
+  
+
+    //return { message: 'Data fetched and stored successfully' };
+    return transformedData;
   });
 
-  this.on('READ', 'Materials', async (req) => {
-    try {
-      const result = await externalService.tx(req).run(req.query);
-      console.log("Data from destination service:", result);
-      return result;
-    } catch (err) {
-      console.error("Error fetching data from destination service:", err);
-      return [];
-    }
+  
+  this.on('READ', 'Projects', async (req) => {
+    const apiS4Srv = await cds.connect.to("Z_SUBC_PROJ_C_CDS");
+    let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_PROJ_C' });
+    console.log(response);
+
+    const transformedData = response.map(item => ({
+      code: item.pspid,
+      description: item.post1
+    }));
+  
+    console.log('transformedData',transformedData);
+  
+    // Insert the transformed data into the Projects entity
+    //await INSERT.into(Projects).entries(transformedData);
+    //return SELECT.from(Projects);
+    return transformedData;
+  
+
+    //return { message: 'Data fetched and stored successfully' };
   });
 
+  this.on('READ', 'WBSElements', async (req) => {
+    const apiS4Srv = await cds.connect.to("Z_SUBC_WBS_C_CDS");
+    let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_wbs_C' });
+    //console.log(response);
+
+    const transformedData = response.map(item => ({
+      number: item.posid,
+      description: item.post1_wbs,
+      project_code:item.pspid
+
+    }));
+  
+    console.log('transformedData',transformedData);
+  
+    // Insert the transformed data into the Projects entity
+    //await INSERT.into(WBSElements).entries(transformedData);
+    //return SELECT.from(WBSElements);
+    return transformedData;
+  
+
+    //return { message: 'Data fetched and stored successfully' };
+  });
   this.on("requestMaterial", async (req) => {
     const { materialCode, quantity, wbsNo, projectCode, plant } = req.data;
     
@@ -38,6 +96,8 @@ module.exports = async function () {
     const quantityAvlToBIssued = material.quantityAvlToBIssued;
     const requestedQuantity = Number(quantity);
     const availableQuantity = Number(quantityAvlToBIssued);
+    const materialGroup =material.materialGroup_id;
+    console.log("material.materialGroup_id",material.materialGroup_id);
 
     if (requestedQuantity > availableQuantity) {
       return req.error(400, 'Insufficient goods available');
@@ -54,6 +114,7 @@ module.exports = async function () {
       projectCode_code: projectCode, // assuming this is the correct foreign key field name
       plant_code: plant, // assuming this is the correct foreign key field name
       submittedBy: "swati", // assuming the user submitting the request
+      materialGroup:material.materialGroup_id
     };
     
     await INSERT.into(MaterialRequisitions).entries(materialRequisition);
@@ -76,6 +137,9 @@ module.exports = async function () {
     const order = {
       ID: orderID,
       orderDate: new Date(),
+      approvalStatus:'PENDING',
+      plant:materialRequisitions[0].plant_code,
+      materialGroup:materialRequisitions[0].materialGroup,
       placedBy: "swati" // assuming the user placing the order
     };
 
@@ -83,11 +147,13 @@ module.exports = async function () {
 
     const orderItems = materialRequisitions.map(requisition => ({
       ID: cds.utils.uuid(), // generate a new unique ID for order items
-      orderID: { ID: orderID },
+      orderID: { ID: orderID }, // this is the Order ID to which the items belong
       materialCode: requisition.materialCode,
+      materialName: requisition.materialName,
       quantity: Number(requisition.quantity), // convert to integer
       uom_name: requisition.uom_name,
-      materialName: requisition.materialName
+      projectCode: requisition.projectCode_code,
+      wbsNo: requisition.wbsNo_number,
     }));
 
     await INSERT.into(OrderItems).entries(orderItems);
@@ -95,7 +161,103 @@ module.exports = async function () {
     // Clear the cart after placing the order
     await DELETE.from(MaterialRequisitions);
 
+
     return { message: 'Order placed successfully', orderID: orderID };
   });
+
+  this.after("placeOrder", async (orderData, req) => {
+    const orderID = orderData.orderID;  // Get the order ID from the previous hook's response
+
+    let dataOrderInfo = await SELECT.from(Orders, O => {
+      O`.*`,
+      O.items(I => {I`.*`})
+    }).where({ID: orderID});
+
+    if (dataOrderInfo[0].items.length < 1) {
+      req.error({
+        code: 'Order-item-missing',
+        message: 'Please maintain at least 1 order item.',
+        status: 417
+      });
+      return;
+    }
+
+    await UPDATE.entity(Orders, orderID).set({
+      approvalStatus: 'PENDING',
+      placedBy: 'swati'
+    });
+
+    let workflowContext = {}, sbpaWorkflowResponse, sbpaUserTaskInstances, orderApproval = {};
+    workflowContext.orderId = dataOrderInfo[0].ID;
+    workflowContext.orderdate = dataOrderInfo[0].orderDate.split('T')[0];
+    workflowContext.placedby = dataOrderInfo[0].placedBy;
+    workflowContext.materialgroup =dataOrderInfo[0].materialGroup;
+    workflowContext.plant=dataOrderInfo[0].plant;
+    workflowContext.orderitem = dataOrderInfo[0].items.map(item => ({
+      materialCode: item.materialCode,
+      materialName: item.materialName,
+      quantity: item.quantity.toString(),
+      uom_name: item.uom_name,
+      projectCode: item.projectCode,
+      wbsNo: item.wbsNo,
+    }));
+
+    // Call SBPA API to start the workflow
+    try {
+      // Start the workflow in SBPA
+      let sbpaWorkflowResponse = await utilitySBPA.createOrderApprovalProcess(workflowContext);
+
+      // Update the Order with workflowInstanceId
+      await UPDATE.entity(Orders).where({ ID: orderID }).set({
+        workflowInstanceId: sbpaWorkflowResponse.id
+      });
+
+      req.notify('Order has been submitted for approval!');
+    } catch (error) {
+      console.error('Error creating workflow in SBPA:', error);
+      req.error({
+        code: 'Workflow-Creation-Failed',
+        message: 'Failed to create workflow for the order.',
+        status: 500
+      });
+    }
+});
+
+this.on("getWorkflowStatus", async (req) => {
+  const orderID = req.data.orderID;
+
+  let orderData = await SELECT.one.from(Orders).where({ ID: orderID });
+
+  if (!orderData || !orderData.workflowInstanceId) {
+      req.error({
+          code: 'Order-Not-Found',
+          message: 'Order or associated workflow not found.',
+          status: 404
+      });
+      return;
+  }
+
+  try {
+      // Retrieve the status of the workflow from SBPA
+      let workflowStatus = await utilitySBPA.getOrderApprovalProcess(orderData.workflowInstanceId);
+
+      //req.reply(workflowStatus);
+      // Update the approvalStatus in the Orders entity
+      await UPDATE(Orders)
+        .set({ approvalStatus: workflowStatus.status })
+        .where({ ID: orderID });
+
+      console.log(workflowStatus);
+      return workflowStatus;
+  } catch (error) {
+      console.error('Error fetching workflow status:', error);
+      req.error({
+          code: 'Workflow-Status-Fetch-Failed',
+          message: 'Failed to fetch the workflow status.',
+          status: 500
+      });
+  }
+});
+
 
 };

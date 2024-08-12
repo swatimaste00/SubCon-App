@@ -27,6 +27,7 @@ modules:
     requires:
       - name: SubCon-App-db
       - name: SubCon-App-auth
+      - name: SubCon-App-destination-service
 
   - name: SubCon-App-db-deployer
     type: hdb
@@ -51,3 +52,11 @@ resources:
       config:
         xsappname: SubCon-App-${space}
         tenant-mode: dedicated
+  - name: SubCon-App-destination-service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      config:
+        HTML5Runtime_enabled: true
+      service: destination
+      service-name: SubCon-App-destination-service
+      service-plan: lite

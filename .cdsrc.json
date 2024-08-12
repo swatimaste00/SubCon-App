@@ -1,1 +1,52 @@
-{}
+{
+    "requires": {
+  
+   
+        "auth": {
+          "binding": {
+            "type": "cf",
+            "apiEndpoint": "https://api.cf.ap11.hana.ondemand.com",
+            "org": "KUOK (Singapore) Limited_devksl-3bk1u0k3",
+            "space": "DEV",
+            "instance": "SubCon-App-auth",
+            "key": "SubCon-App-auth-key",
+            "resolved": false
+          },
+          "kind": "mocked",
+          "vcap": {
+            "name": "auth"
+          }
+        },
+        "destinations": {
+          "binding": {
+            "type": "cf",
+            "apiEndpoint": "https://api.cf.ap11.hana.ondemand.com",
+            "org": "KUOK (Singapore) Limited_devksl-3bk1u0k3",
+            "space": "DEV",
+            "instance": "router-destination-service",
+            "key": "router-destination-service-key",
+            "resolved": false
+          },
+          "kind": "destinations",
+          "vcap": {
+            "name": "destinations"
+          }
+        },
+        "connectivity": {
+          "binding": {
+            "type": "cf",
+            "apiEndpoint": "https://api.cf.ap11.hana.ondemand.com",
+            "org": "KUOK (Singapore) Limited_devksl-3bk1u0k3",
+            "space": "DEV",
+            "instance": "subcon-app-connectivity",
+            "key": "subcon-app-connectivity-key",
+            "resolved": false
+          },
+          "kind": "connectivity",
+          "vcap": {
+            "name": "connectivity"
+          }
+        }
+      
+    }
+  }

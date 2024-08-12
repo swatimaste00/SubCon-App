@@ -48,7 +48,7 @@ Content-Type: application/json
 }
 
 ### Add Another Item to Cart
-POST http://localhost:4004/cart/requestMaterial
+POST https://gamification-qga2hkdu-dev-subcon-app-srv.cfapps.eu20.hana.ondemand.com/cart/requestMaterial
 Content-Type: application/json
 
 {
@@ -59,12 +59,35 @@ Content-Type: application/json
   "plant": "Plant002"
 }
 
+
+### Place Order
+POST http://localhost:4004/cart/placeOrder
+Content-Type: application/json
+
+{}
+
+### Retrieve Orders
+GET http://localhost:4004/cart/Orders
+
+### Retrieve Order Items
+GET http://localhost:4004/cart/OrderItems
+
 ### Place Order
 POST https://gamification-qga2hkdu-dev-subcon-app-srv.cfapps.eu20.hana.ondemand.com/cart/placeOrder
 Content-Type: application/json
 
 {}
 
+### Get Workflow Status
+POST http://localhost:4004/cart/getWorkflowStatus
+Content-Type: application/json
+
+{
+  "orderID":"8a3d3d8d-1d9d-4791-bf55-18b60164879f"
+}
+
+###
+GET https://kuok--singapore--limited-devksl-3bk1u0k3-dev-subcon-app-srv.cfapps.ap11.hana.ondemand.com/cart/Projects
 ### Retrieve Orders
 GET https://gamification-qga2hkdu-dev-subcon-app-srv.cfapps.eu20.hana.ondemand.com/cart/Orders
 
@@ -87,7 +110,3 @@ Authorization: Basic ie88LJA9wSoE6HZzKcGItEomc:0SrG6asc1Lgbx9PAZtI5Mmzuhm2atjrUi
 Content-Type: application/x-www-form-urlencoded;charset=UTF-8
 
 grant_type=client_credentials
-
-
-### You can add more requests below for different endpoints or parameters
-AAAAAAAAAAAAAAAAAAAAAK7DhwEAAAAAWPiEGMLY1%2FimHUDqOvi1TLihij8%3DEOdX8RBNPvu1gme6xx30RNieONZzrX1qHjllsYKVX0bk3OnTMT

@@ -13,9 +13,11 @@ service SubConService @(path:'/cart') {
   entity Plants as projection on db.Plants;
   entity Projects as projection on db.Projects;
   entity Z_SUBC_PLANT_C as projection on external.Z_SUBC_PLANT_C;
+  entity MRApprovals as projection on db.MRApprovals;
   action requestMaterial(  materialCode: String,quantity : String, wbsNo:String,plant : String,projectCode: String);
   action clearCart();
   action placeOrder();
+  action getWorkflowStatus(orderID:UUID)
 }
 
 type MaterialData {
