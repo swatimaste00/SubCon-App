@@ -14,6 +14,7 @@ entity Materials {
         materialGroup        : Association to one MaterialGroups; // a material belongs to a group
         wbsNo                : Association to one WBSElements;
         quantityAvlToBIssued : String;
+        materialDepartment:String;
         materialRequisition  : Association to MaterialRequisitions;
 }
 
@@ -58,6 +59,7 @@ entity MaterialRequisitions {
         plant                : Association to one Plants;
         projectCode          : Association to one Projects;
         quantityAvlToBIssued : String;
+        requirementDate:Date;
         submittedBy          : String(50);
 
 
@@ -94,4 +96,16 @@ entity OrderItems {
         uom_name     : String;
         projectCode  : String;
         wbsNo        : String;
+        requirementDate:Date;
+}
+
+entity SubContractorDetails{
+    key emailId : String;
+    name:String;
+    date:Date;
+    customer:String;
+    plant:Association to one Plants;
+    project:Association to one Projects;
+    department:String;
+
 }

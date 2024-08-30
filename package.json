@@ -30,13 +30,6 @@
         "db": "hana",
         "auth": "dummy"
       },
-      "PLANTDETAILS": {
-        "kind": "odata",
-        "credentials": {
-          "destination": "S4-Z_SUBC_PLANT_C_CDS",
-          "path": ""
-        }
-      },
       "API_PRODUCT_SRV": {
         "kind": "odata-v2",
         "model": "srv/external/API_PRODUCT_SRV"

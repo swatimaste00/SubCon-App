@@ -28,6 +28,7 @@ modules:
       - name: SubCon-App-db
       - name: SubCon-App-auth
       - name: SubCon-App-destination-service
+      - name: SubCon-App-connectivity
 
   - name: SubCon-App-db-deployer
     type: hdb
@@ -59,4 +60,9 @@ resources:
         HTML5Runtime_enabled: true
       service: destination
       service-name: SubCon-App-destination-service
+      service-plan: lite
+  - name: SubCon-App-connectivity
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: connectivity
       service-plan: lite

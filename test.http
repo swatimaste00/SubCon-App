@@ -35,6 +35,7 @@ GET https://gamification-qga2hkdu-dev-subcon-app-srv.cfapps.eu20.hana.ondemand.c
 ###
 GET  http://localhost:4004/cart/MaterialRequisitions
 
+
 ### Add Item to Cart
 POST http://localhost:4004/cart/requestMaterial
 Content-Type: application/json
@@ -71,6 +72,20 @@ GET http://localhost:4004/cart/Orders
 
 ### Retrieve Order Items
 GET http://localhost:4004/cart/OrderItems
+
+### Retrieve SubContractorDetails
+GET http://localhost:40661/cart/SubContractorDetails
+
+
+### Get Workflow Status
+POST http://localhost:40661/cart/setplantAndProjectDetails
+Content-Type: application/json
+
+{
+  "plant": "PLANT01",
+  "projectCode": "PROJECT123"
+}
+
 
 ### Place Order
 POST https://gamification-qga2hkdu-dev-subcon-app-srv.cfapps.eu20.hana.ondemand.com/cart/placeOrder
@@ -110,3 +125,11 @@ Authorization: Basic ie88LJA9wSoE6HZzKcGItEomc:0SrG6asc1Lgbx9PAZtI5Mmzuhm2atjrUi
 Content-Type: application/x-www-form-urlencoded;charset=UTF-8
 
 grant_type=client_credentials
+
+### getsubcon details
+POST http://localhost:4004/cart/getSubContractorDetails
+Content-Type: application/json
+
+{
+  "email":"swati.maste@sap.com"
+}

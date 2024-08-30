@@ -5,17 +5,26 @@ const { uuid } = cds.utils;
 module.exports = async function () {
 
   const db = await cds.connect.to('db'); // connect to database service
-  const { Materials, MaterialRequisitions ,Orders,OrderItems, Z_SUBC_PLANT_C,MRApprovals,Plants,Projects,WBSElements } = cds.entities; // get reflected definitions
+  const { Materials, MaterialRequisitions ,Orders,OrderItems, Z_SUBC_PLANT_C,MRApprovals,Plants,Projects,WBSElements, SubContractorDetails} = cds.entities; // get reflected definitions
 
-  const externalService = await cds.connect.to('PLANTDETAILS');
 
-  // this.on(['READ','GET'], `Plants`, async (req) => {
-  //   const apiS4ProudctSrv = await cds.connect.to('Z_SUBC_PLANT_C_CDS');
-  //   let response =  await apiS4ProudctSrv.send(SELECT.from('Z_SUBC_PLANT_C'));
-  //   console.log(JSON.stringify(response))
-  //   let response2 = [];
+  this.on("READ", "SubContractorDetails", async (req) => {
+    var {email} = cds.context.user.id;
+    if(!email){
+      email = "ajit.kumar.panda@sap.com"
+    }
+    const subcontractor = await SELECT.one.from(SubContractorDetails).where({ emailId: email });
+    
+    if (subcontractor) {
+      subcontractor.date = new Date().toISOString().split('T')[0]; // current date in YYYY-MM-DD format
+    }
+    
+    console.log("subcontractor", subcontractor);
+    return subcontractor;
+  });
+  
 
-  // });
+  
 
   this.on('READ', 'Plants', async (req) => {
     const apiS4Srv = await cds.connect.to("Z_SUBC_PLANT_C_CDS");
@@ -27,13 +36,8 @@ module.exports = async function () {
       name: item.name1
     }));
   
-    console.log('transformedData',transformedData);
+    //console.log('transformedData',transformedData);
   
-    // Insert the transformed data into the Plants entity
-    //await INSERT.into(Plants).entries(transformedData);
-  
-
-    //return { message: 'Data fetched and stored successfully' };
     return transformedData;
   });
 
@@ -41,18 +45,14 @@ module.exports = async function () {
   this.on('READ', 'Projects', async (req) => {
     const apiS4Srv = await cds.connect.to("Z_SUBC_PROJ_C_CDS");
     let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_PROJ_C' });
-    console.log(response);
+    //console.log(response);
 
     const transformedData = response.map(item => ({
       code: item.pspid,
       description: item.post1
     }));
   
-    console.log('transformedData',transformedData);
-  
-    // Insert the transformed data into the Projects entity
-    //await INSERT.into(Projects).entries(transformedData);
-    //return SELECT.from(Projects);
+    //console.log('transformedData',transformedData);
     return transformedData;
   
 
@@ -71,16 +71,35 @@ module.exports = async function () {
 
     }));
   
-    console.log('transformedData',transformedData);
+    //console.log('transformedData',transformedData);
   
-    // Insert the transformed data into the Projects entity
-    //await INSERT.into(WBSElements).entries(transformedData);
-    //return SELECT.from(WBSElements);
     return transformedData;
   
-
-    //return { message: 'Data fetched and stored successfully' };
   });
+
+  this.on("setplantAndProjectDetails", async (req) => {
+    const { projectCode, plant } = req.data;
+
+    // Get the email of the currently logged-in user
+    var {email} = cds.context.user.id;
+    if(!email){
+      email = "ajit.kumar.panda@sap.com"
+    }
+
+    // Update the SubContractorDetails entity with the provided plant and project values
+    await UPDATE(SubContractorDetails)
+        .set({
+            plant_code: plant,
+            project_code: projectCode,
+        })
+        .where({ emailId: email });
+
+        console.log("Update Success")
+
+
+});
+
+
   this.on("requestMaterial", async (req) => {
     const { materialCode, quantity, wbsNo, projectCode, plant } = req.data;
     

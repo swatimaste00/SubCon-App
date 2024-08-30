@@ -1,9 +1,9 @@
-code,name,uom_name,descr,materialGroup_id,wbsNo_number,quantityAvlToBIssued
-M1,Steel,kg,Steel- metal,G001,GT03639.T.E00027,10
-M2,Wire,m,Electrical Wire,G002,GT03639.T.E00026,10
-M3,Plastic Bag,pcs,Plastic Bag,G003,GT03639.T.E00030,10
-M4,Bulb,pcs,Bulb,G004,GT03639.T.E00025,10
-M5,Tape,pcs,Tape,G004,GT03639.T.E00028,10
-M6,Table,pcs,Table,G004,GT03639.T.E00029,10
-M7,Copper,kg,Copper,G001,GT03639.T.E00021,10
-M8,Aluminium,kg,Aluminium,G001,GT03639.T.E00022,10
+code,name,uom_name,descr,materialGroup_id,wbsNo_number,quantityAvlToBIssued,materialDepartment
+M1,Steel,kg,Steel- metal,G001,GT03639.T.E00027,10,DYP Steel
+M2,Wire,m,Electrical Wire,G002,GT03639.T.E00026,10,ABC Electrical
+M3,Plastic Bag,pcs,Plastic Bag,G003,GT03639.T.E00030,10,
+M4,Bulb,pcs,Bulb,G004,GT03639.T.E00025,10,ABC Electrical
+M5,Tape,pcs,Tape,G004,GT03639.T.E00028,10,
+M6,Table,pcs,Table,G004,GT03639.T.E00029,10,
+M7,Copper,kg,Copper,G001,GT03639.T.E00021,10,DYP Steel
+M8,Aluminium,kg,Aluminium,G001,GT03639.T.E00022,10,DYP Steel
