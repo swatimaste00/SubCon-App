@@ -1,0 +1,60 @@
+{
+ "meta": {
+  "creator": "cds-dk 7.8.0"
+ },
+ "$version": "2.0",
+ "definitions": {
+  "Z_SUBC_MATNR_C_CDS": {
+   "kind": "service",
+   "@cds.external": true,
+   "@m.IsDefaultEntityContainer": "true",
+   "@sap.supported.formats": "atom json xlsx"
+  },
+  "Z_SUBC_MATNR_C_CDS.Z_SUBC_MATNR_C": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.creatable": "false",
+   "@sap.updatable": "false",
+   "@sap.deletable": "false",
+   "@sap.content.version": "1",
+   "@sap.label": "SubCon Material - Consumption",
+   "elements": {
+    "werks": {
+     "key": true,
+     "type": "cds.String",
+     "length": 4,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Plant",
+     "notNull": true
+    },
+    "matnr": {
+     "key": true,
+     "type": "cds.String",
+     "length": 40,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Material",
+     "@sap.quickinfo": "Material Number",
+     "notNull": true
+    },
+    "maktx": {
+     "type": "cds.String",
+     "length": 40,
+     "@sap.label": "Material description"
+    },
+    "meins": {
+     "type": "cds.String",
+     "length": 3,
+     "@sap.label": "Base Unit of Measure",
+     "@sap.semantics": "unit-of-measure"
+    },
+    "mseh3": {
+     "type": "cds.String",
+     "length": 3,
+     "@sap.label": "Commercial",
+     "@sap.quickinfo": "External Unit of Measurement in Commercial Format (3-Char.)"
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,48 @@
+{
+ "meta": {
+  "creator": "cds-dk 7.8.0"
+ },
+ "$version": "2.0",
+ "definitions": {
+  "Z_SUBC_MATKL_C_CDS": {
+   "kind": "service",
+   "@cds.external": true,
+   "@m.IsDefaultEntityContainer": "true",
+   "@sap.supported.formats": "atom json xlsx"
+  },
+  "Z_SUBC_MATKL_C_CDS.Z_SUBC_MATKL_C": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.creatable": "false",
+   "@sap.updatable": "false",
+   "@sap.deletable": "false",
+   "@sap.content.version": "1",
+   "@sap.label": "SubCon Material Grp- Consumption",
+   "elements": {
+    "werks": {
+     "key": true,
+     "type": "cds.String",
+     "length": 4,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Plant",
+     "notNull": true
+    },
+    "matkl": {
+     "key": true,
+     "type": "cds.String",
+     "length": 9,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Material Group",
+     "notNull": true
+    },
+    "wgbez60": {
+     "type": "cds.String",
+     "length": 60,
+     "@sap.label": "Mat.Grp Desc. 2",
+     "@sap.quickinfo": "Description of the Material Group"
+    }
+   }
+  }
+ }
+}

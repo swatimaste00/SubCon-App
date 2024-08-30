@@ -1,0 +1,56 @@
+{
+ "meta": {
+  "creator": "cds-dk 7.8.0"
+ },
+ "$version": "2.0",
+ "definitions": {
+  "Z_SUBC_CUST_C_CDS": {
+   "kind": "service",
+   "@cds.external": true,
+   "@m.IsDefaultEntityContainer": "true",
+   "@sap.supported.formats": "atom json xlsx"
+  },
+  "Z_SUBC_CUST_C_CDS.Z_SUBC_CUST_C": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.creatable": "false",
+   "@sap.updatable": "false",
+   "@sap.deletable": "false",
+   "@sap.content.version": "1",
+   "@sap.label": "SubCon Customer - Consumption",
+   "elements": {
+    "partner": {
+     "key": true,
+     "type": "cds.String",
+     "length": 10,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Business Partner",
+     "@sap.quickinfo": "Business Partner Number",
+     "notNull": true
+    },
+    "bukrs": {
+     "key": true,
+     "type": "cds.String",
+     "length": 4,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Company Code",
+     "notNull": true
+    },
+    "vkorg": {
+     "key": true,
+     "type": "cds.String",
+     "length": 4,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Sales Organization",
+     "notNull": true
+    },
+    "name": {
+     "type": "cds.String",
+     "length": 81,
+     "@sap.display.format": "UpperCase"
+    }
+   }
+  }
+ }
+}

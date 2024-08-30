@@ -23,7 +23,22 @@ module.exports = async function () {
     return subcontractor;
   });
   
+  this.on('READ', 'Plants', async (req) => {
+    const apiS4Srv = await cds.connect.to("Z_SUBC_CUST_C_CDS");
+    let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_CUST_C' });
 
+    console.log("response", response);
+  
+    // // Transform the response to map werks -> code and name1 -> name
+    // const transformedData = response.map(item => ({
+    //   code: item.werks,
+    //   name: item.name1
+    // }));
+  
+    // //console.log('transformedData',transformedData);
+  
+    // return transformedData;
+  });
   
 
   this.on('READ', 'Plants', async (req) => {
