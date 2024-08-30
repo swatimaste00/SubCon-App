@@ -1,0 +1,57 @@
+{
+ "meta": {
+  "creator": "cds-dk 7.8.0"
+ },
+ "$version": "2.0",
+ "definitions": {
+  "Z_SUBC_DEPT_C_CDS": {
+   "kind": "service",
+   "@cds.external": true,
+   "@m.IsDefaultEntityContainer": "true",
+   "@sap.supported.formats": "atom json xlsx"
+  },
+  "Z_SUBC_DEPT_C_CDS.Z_SUBC_DEPT_C": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.creatable": "false",
+   "@sap.updatable": "false",
+   "@sap.deletable": "false",
+   "@sap.content.version": "1",
+   "@sap.label": "SubCon Dept - Consumption",
+   "elements": {
+    "werks": {
+     "key": true,
+     "type": "cds.String",
+     "length": 4,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Plant",
+     "notNull": true
+    },
+    "kostl": {
+     "type": "cds.String",
+     "length": 10,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Cost Center"
+    },
+    "KTEXT": {
+     "type": "cds.String",
+     "length": 20,
+     "@sap.label": "Name",
+     "@sap.quickinfo": "General Name"
+    },
+    "verak_user": {
+     "type": "cds.String",
+     "length": 12,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "User Responsible"
+    },
+    "SMTP_ADDR": {
+     "type": "cds.String",
+     "length": 241,
+     "@sap.label": "E-Mail Address"
+    }
+   }
+  }
+ }
+}
