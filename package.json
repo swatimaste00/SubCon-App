@@ -38,7 +38,8 @@
         "kind": "odata-v2",
         "model": "srv/external/metadata",
         "credentials": {
-          "destination": "S4-Z_SUBC_PLANT_C_CDS"
+          "destination": "S4-Z_SUBC_PLANT_C_CDS",
+          "path": "/sap/opu/odata/sap/Z_SUBC_PLANT_C_CDS"
         }
       },
       "Z_SUBC_PLANT_C_CDS": {

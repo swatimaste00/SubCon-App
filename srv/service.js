@@ -22,23 +22,34 @@ module.exports = async function () {
     console.log("subcontractor", subcontractor);
     return subcontractor;
   });
-  
-  this.on('READ', 'Plants', async (req) => {
-    const apiS4Srv = await cds.connect.to("Z_SUBC_CUST_C_CDS");
-    let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_CUST_C' });
 
+    
+  
+  //Z_SUBC_PLANT_C API
+  this.on('READ', 'Z_SUBC_PLANT_C', async (req) => {
+    const apiS4Srv = await cds.connect.to("metadata");
+    let response = await apiS4Srv.run(req.query);
     console.log("response", response);
-  
-    // // Transform the response to map werks -> code and name1 -> name
-    // const transformedData = response.map(item => ({
-    //   code: item.werks,
-    //   name: item.name1
-    // }));
-  
-    // //console.log('transformedData',transformedData);
-  
-    // return transformedData;
+    return response;
   });
+  
+  // //customer API
+  // this.on('READ', 'Plants', async (req) => {
+  //   const apiS4Srv = await cds.connect.to("Z_SUBC_MATNR_C_CDS");
+  //   let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_MATNR_C' });
+
+  //   console.log("response", response);
+  
+  //   // // Transform the response to map werks -> code and name1 -> name
+  //   // const transformedData = response.map(item => ({
+  //   //   code: item.werks,
+  //   //   name: item.name1
+  //   // }));
+  
+  //   // //console.log('transformedData',transformedData);
+  
+  //   // return transformedData;
+  // });
   
 
   this.on('READ', 'Plants', async (req) => {
@@ -116,7 +127,7 @@ module.exports = async function () {
 
 
   this.on("requestMaterial", async (req) => {
-    const { materialCode, quantity, wbsNo, projectCode, plant } = req.data;
+    const { materialCode, quantity, wbsNo ,requirementDate} = req.data;
     
     // Check if material exists
     const material = await SELECT.one.from(Materials).where({ code: materialCode });
@@ -143,11 +154,10 @@ module.exports = async function () {
       materialCode:req.data.materialCode,
       quantity:quantity,
       uom_name: uom,
+      requirementDate:requirementDate,
       materialName:materialName,
       wbsNo_number: wbsNo, // assuming this is the correct foreign key field name
-      projectCode_code: projectCode, // assuming this is the correct foreign key field name
-      plant_code: plant, // assuming this is the correct foreign key field name
-      submittedBy: "swati", // assuming the user submitting the request
+      submittedBy: cds.context.user.id, // assuming the user submitting the request
       materialGroup:material.materialGroup_id
     };
     
@@ -172,9 +182,8 @@ module.exports = async function () {
       ID: orderID,
       orderDate: new Date(),
       approvalStatus:'PENDING',
-      plant:materialRequisitions[0].plant_code,
       materialGroup:materialRequisitions[0].materialGroup,
-      placedBy: "swati" // assuming the user placing the order
+      placedBy:cds.context.user.id // assuming the user placing the order
     };
 
     await INSERT.into(Orders).entries(order);
@@ -186,7 +195,6 @@ module.exports = async function () {
       materialName: requisition.materialName,
       quantity: Number(requisition.quantity), // convert to integer
       uom_name: requisition.uom_name,
-      projectCode: requisition.projectCode_code,
       wbsNo: requisition.wbsNo_number,
     }));
 
@@ -226,13 +234,11 @@ module.exports = async function () {
     workflowContext.orderdate = dataOrderInfo[0].orderDate.split('T')[0];
     workflowContext.placedby = dataOrderInfo[0].placedBy;
     workflowContext.materialgroup =dataOrderInfo[0].materialGroup;
-    workflowContext.plant=dataOrderInfo[0].plant;
     workflowContext.orderitem = dataOrderInfo[0].items.map(item => ({
       materialCode: item.materialCode,
       materialName: item.materialName,
       quantity: item.quantity.toString(),
       uom_name: item.uom_name,
-      projectCode: item.projectCode,
       wbsNo: item.wbsNo,
     }));
 

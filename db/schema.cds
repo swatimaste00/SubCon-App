@@ -6,6 +6,17 @@ using {
     User
 } from '@sap/cds/common';
 
+entity SubContractorDetails{
+    key emailId : String;
+    customerID:Int16;
+    customerName:String;
+    date:Date;
+    plant:Association to one Plants;
+    project:Association to one Projects;
+    department:String;
+
+}
+
 entity Materials {
     key code                 : String(100);
         name                 : String(20);
@@ -56,10 +67,8 @@ entity MaterialRequisitions {
         quantity             : String;
         uom                  : Association to one UoMs;
         materialName         : String(50);
-        plant                : Association to one Plants;
-        projectCode          : Association to one Projects;
+        requirementDate: Date;
         quantityAvlToBIssued : String;
-        requirementDate:Date;
         submittedBy          : String(50);
 
 
@@ -83,7 +92,6 @@ entity Orders {
         approvalStatus       : String(20);
         rejectionRemarks     : String(256);
         items : Composition of many OrderItems on items.orderID = $self;
-        plant:String;
         materialGroup:String;
 }
 
@@ -94,18 +102,7 @@ entity OrderItems {
         materialName : String;
         quantity     : Integer;
         uom_name     : String;
-        projectCode  : String;
         wbsNo        : String;
         requirementDate:Date;
 }
 
-entity SubContractorDetails{
-    key emailId : String;
-    name:String;
-    date:Date;
-    customer:String;
-    plant:Association to one Plants;
-    project:Association to one Projects;
-    department:String;
-
-}

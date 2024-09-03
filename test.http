@@ -41,11 +41,10 @@ POST http://localhost:4004/cart/requestMaterial
 Content-Type: application/json
 
 {
-  "materialCode": "M1",
-  "quantity": "5",
-  "wbsNo": "WBS001",
-  "projectCode": "P001",
-  "plant": "Plant001"
+  "materialCode": "M2",
+  "quantity": "10",
+  "wbsNo": "WBS002",
+  "requirementDate":"2024-08-31"
 }
 
 ### Add Another Item to Cart
@@ -56,8 +55,7 @@ Content-Type: application/json
   "materialCode": "M2",
   "quantity": "10",
   "wbsNo": "WBS002",
-  "projectCode": "P002",
-  "plant": "Plant002"
+  "requirementdate":"2024-08-31"
 }
 
 
@@ -74,7 +72,7 @@ GET http://localhost:4004/cart/Orders
 GET http://localhost:4004/cart/OrderItems
 
 ### Retrieve SubContractorDetails
-GET http://localhost:40661/cart/SubContractorDetails
+GET http://localhost:4004/cart/SubContractorDetails
 
 
 ### Get Workflow Status
