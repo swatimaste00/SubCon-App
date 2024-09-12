@@ -1,5 +1,1 @@
-id,name
-G001,Metal Department
-G002,Electrical
-G003,Plastic
-G004,Miscellaneous 
+id,name,plant_code

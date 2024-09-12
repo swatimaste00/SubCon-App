@@ -8,7 +8,7 @@ using {
 
 entity SubContractorDetails{
     key emailId : String;
-    customerID:Int16;
+    customerID:Integer;
     customerName:String;
     vkOrg:String;
     date:Date;
@@ -22,10 +22,10 @@ entity SubContractorDetails{
 }
 
 entity Materials {
-    key code                 : String(100);
-        name                 : String(20);
+    key code                 : String(255);
+        name                 : String(255);
         uom                  : String;
-        descr                : String(100);
+        descr                : String(255);
         materialGroup        : Association to one MaterialGroups; // a material belongs to a group
         wbsNo                : Association to one WBSElements;
         quantityAvlToBIssued : String;
@@ -35,41 +35,42 @@ entity Materials {
 }
 
 entity WBSElements {
-    key number      : String(20);
-        description : String(100);project : Association to Projects;
+    key number      : String(255);
+        description : String(255);
+        project : Association to Projects;
         
 }
 
 entity Plants{
-    key code:String(10);
-    name:String(50);
+    key code:String(255);
+    name:String(255);
 
 }
 
 entity Departments{
-    key code:String(10);
+    key code:String(255);
     plant:Association to one Plants;
-    name:String(50);
+    name:String(255);
     approverName:String;
     approverEmailId:String;
 
 }
 
 entity Projects {
-    key code        : String(25);
-        description : String(50);
+    key code        : String(255);
+        description : String(255);
         elements : Composition of many WBSElements on elements.project = $self;
 }
 
 entity MaterialGroups {
-    key id   : String(50);
-        name : String(100);
+    key id   : String(255);
+        name : String(255);
         plant:Association to one Plants;
 }
 
 entity UoMs {
     key name        : String(20);
-        description : String(100);
+        description : String(255);
 }
 
 entity MaterialRequisitions {
@@ -77,14 +78,14 @@ entity MaterialRequisitions {
         materials            : Composition of many Materials
                                    on materials.materialRequisition = $self;
         wbsNo                : Association to one WBSElements;
-        materialCode         : String(50);
+        materialCode         : String(255);
         materialGroup:String;
         quantity             : String;
         uom                  : String;
-        materialName         : String(50);
+        materialName         : String(255);
         requirementDate: Date;
         quantityAvlToBIssued : String;
-        submittedBy          : String(50);
+        submittedBy          : String(255);
 
 
 }
@@ -95,16 +96,16 @@ entity MRApprovals : cuid, managed {
     taskInstanceId : UUID;
     level          : Int16;
     approver       : String(256);
-    status         : String(20);
+    status         : String(255);
 }
 
 entity Orders {
-    key ID                   : String(14);
+    key ID                   : String;
         orderDate            : DateTime;
         placedBy             : String;
         workflowInstanceId   : UUID;
         workflowApproverNext : User;
-        approvalStatus       : String(20);
+        approvalStatus       : String(255);
         rejectionRemarks     : String(256);
         items : Composition of many OrderItems on items.orderID = $self;
         materialGroup:String;

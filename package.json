@@ -38,7 +38,7 @@
         "kind": "odata-v2",
         "model": "srv/external/metadata",
         "credentials": {
-          "destination": "S4-Z_SUBC_PLANT_C_CDS",
+          "destination": "S4-API",
           "path": "/sap/opu/odata/sap/Z_SUBC_PLANT_C_CDS"
         }
       },
@@ -55,7 +55,7 @@
         "model": "srv/external/Z_SUBC_PROJ_C_CDS",
         "credentials": {
           "destination": "kuok-subcontract-router",
-          "path": "/backend/sap/opu/odata/sap/Z_SUBC_PROJ_C_CDS"
+          "path": "/sap/opu/odata/sap/Z_SUBC_PROJ_C_CDS"
         }
       },
       "Z_SUBC_WBS_C_CDS": {
