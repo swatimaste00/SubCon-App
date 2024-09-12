@@ -76,12 +76,13 @@ GET http://localhost:4004/cart/SubContractorDetails
 
 
 ### Get Workflow Status
-POST http://localhost:40661/cart/setplantAndProjectDetails
+POST http://localhost:36887/cart/setplantProjectDeptDetails
 Content-Type: application/json
 
 {
   "plant": "PLANT01",
-  "projectCode": "PROJECT123"
+  "projectCode": "PROJECT123",
+  "department":"dept1"
 }
 
 

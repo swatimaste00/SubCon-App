@@ -5,27 +5,52 @@ const { uuid } = cds.utils;
 module.exports = async function () {
 
   const db = await cds.connect.to('db'); // connect to database service
-  const { Materials, MaterialRequisitions ,Orders,OrderItems, Z_SUBC_PLANT_C,MRApprovals,Plants,Projects,WBSElements, SubContractorDetails} = cds.entities; // get reflected definitions
+  const { Materials, MaterialRequisitions ,Orders,OrderItems, Z_SUBC_PLANT_C,MRApprovals,Plants,Projects,WBSElements, SubContractorDetails,Departments} = cds.entities; // get reflected definitions
 
 
   this.on("READ", "SubContractorDetails", async (req) => {
     var {email} = cds.context.user.id;
-    if(!email){
-      email = "ajit.kumar.panda@sap.com"
-    }
-    const subcontractor = await SELECT.one.from(SubContractorDetails).where({ emailId: email });
-    
+    const apiS4Srv = await cds.connect.to("Z_SUBC_CUST_C_CDS");
+    let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_CUST_C' });
+  
+    // Transform the response to map werks -> code and name1 -> name
+    const transformedData = response.map(item => ({
+      customerID: item.partner,
+      customerName: item.name,
+      emailId:item.email,
+      vkOrg:item.vkorg
+        
+    }));
+
+    var tempData ={};
+  
+    //console.log('transformedData',transformedData);
+
+    var subcontractor = await SELECT.one.from(SubContractorDetails).where({ emailId: email });
+
     if (subcontractor) {
-      subcontractor.date = new Date().toISOString().split('T')[0]; // current date in YYYY-MM-DD format
+      const date = new Date();
+      const formattedDate = date.toLocaleDateString('en-GB').split('/').join('-');
+      subcontractor.date = formattedDate;
+      console.log("subcontractor", subcontractor);
+      return subcontractor;
+    }    
+    else{
+      var date = new Date();
+      const formattedDate = date.toLocaleDateString('en-GB').split('/').join('-');
+      tempData["emailId"] ="swati.maste@sap.com",
+      tempData["customerID"] = 11002773,
+      tempData["customerName"] = "ABC Pvt. Ltd."
+      tempData["vkOrg"] ="DA11",     
+      tempData["date"] = formattedDate;
+      //console.log("tempData", tempData);
+      return tempData;
+
     }
     
-    console.log("subcontractor", subcontractor);
-    return subcontractor;
   });
 
-    
-  
-  //Z_SUBC_PLANT_C API
+ // destination
   this.on('READ', 'Z_SUBC_PLANT_C', async (req) => {
     const apiS4Srv = await cds.connect.to("metadata");
     let response = await apiS4Srv.run(req.query);
@@ -33,24 +58,66 @@ module.exports = async function () {
     return response;
   });
   
-  // //customer API
-  // this.on('READ', 'Plants', async (req) => {
-  //   const apiS4Srv = await cds.connect.to("Z_SUBC_MATNR_C_CDS");
-  //   let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_MATNR_C' });
+  //Z_SUBC_DEPT_C_CDS API
+  this.on('READ', 'Departments', async (req) => {
+    const apiS4Srv = await cds.connect.to("Z_SUBC_DEPT_C_CDS");
+    let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_DEPT_C' });
 
-  //   console.log("response", response);
+    //console.log("response", response);
   
-  //   // // Transform the response to map werks -> code and name1 -> name
-  //   // const transformedData = response.map(item => ({
-  //   //   code: item.werks,
-  //   //   name: item.name1
-  //   // }));
+    // Transform the response to map werks -> code and name1 -> name
+    const transformedData = response.map(item => ({
+      code: item.kostl,
+      name: item.KTEXT,
+      approverName:item.verak_user,
+      approverEmailId:item.SMTP_ADDR,
+      plant_code:item.werks
+    }));
   
-  //   // //console.log('transformedData',transformedData);
+    //console.log('Hello transformedData',transformedData);
   
-  //   // return transformedData;
-  // });
+     return transformedData;
+  });
   
+
+    //Z_SUBC_MATKL_C_CDS API
+    this.on('READ', 'MaterialGroups', async (req) => {
+      const apiS4Srv = await cds.connect.to("Z_SUBC_MATKL_C_CDS");
+      let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_MATKL_C' });
+  
+      //console.log("response", response);
+    
+      // Transform the response to map werks -> code and name1 -> name
+      const transformedData = response.map(item => ({
+        id: item.matkl,
+        name: item.wgbez60,
+        plant_code:item.werks
+      }));
+    
+      //console.log('Hello transformedData',transformedData);
+    
+       return transformedData;
+    });
+    
+     //Z_SUBC_MATNR_C_CDS API
+     this.on('READ', 'Materials', async (req) => {
+      const apiS4Srv = await cds.connect.to("Z_SUBC_MATNR_C_CDS");
+      let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_MATNR_C' });
+  
+      //console.log("response", response);
+    
+      // Transform the response to map werks -> code and name1 -> name
+      const transformedData = response.map(item => ({
+        code: item.matnr,
+        name: item.maktx,
+        uom:item.meins,
+        plant_code:item.werks,
+      }));
+    
+      console.log('Hello transformedData',transformedData);
+    
+      return transformedData;
+    });
 
   this.on('READ', 'Plants', async (req) => {
     const apiS4Srv = await cds.connect.to("Z_SUBC_PLANT_C_CDS");
@@ -103,13 +170,21 @@ module.exports = async function () {
   
   });
 
-  this.on("setplantAndProjectDetails", async (req) => {
-    const { projectCode, plant } = req.data;
+  this.on("setplantProjectDeptDetails", async (req) => {
+    const { projectCode, plant,department } = req.data;
 
     // Get the email of the currently logged-in user
     var {email} = cds.context.user.id;
     if(!email){
-      email = "ajit.kumar.panda@sap.com"
+      email = "swati.maste@sap.com"
+    }
+
+    // Fetch the approver details from the Departments entity based on the selected department
+    const departmentDetails = await SELECT.one.from(Departments)
+        .where({ code: department });
+
+    if (!departmentDetails) {
+        return req.error(404, `Department with code ${department} not found`);
     }
 
     // Update the SubContractorDetails entity with the provided plant and project values
@@ -117,11 +192,13 @@ module.exports = async function () {
         .set({
             plant_code: plant,
             project_code: projectCode,
+            department_code:department,
+            pproverName: departmentDetails.approverName,
+            approverEmailId: departmentDetails.approverEmailId
         })
         .where({ emailId: email });
 
         console.log("Update Success")
-
 
 });
 
@@ -136,7 +213,7 @@ module.exports = async function () {
     }
 
     // Fetch uom and materialName from the Materials entity
-    const uom = material.uom_name;
+    const uom = material.uom;
     const materialName = material.name;
     const quantityAvlToBIssued = material.quantityAvlToBIssued;
     const requestedQuantity = Number(quantity);
@@ -153,7 +230,7 @@ module.exports = async function () {
       ID: cds.utils.uuid(), // generate a unique ID
       materialCode:req.data.materialCode,
       quantity:quantity,
-      uom_name: uom,
+      uom: uom,
       requirementDate:requirementDate,
       materialName:materialName,
       wbsNo_number: wbsNo, // assuming this is the correct foreign key field name
@@ -176,8 +253,13 @@ module.exports = async function () {
     if (materialRequisitions.length === 0) {
       return req.error(400, 'No items in the cart to place an order');
     }
-
-    const orderID = cds.utils.uuid();
+    const date = new Date();
+    const orderID = date.getFullYear().toString() +
+                ("0" + (date.getMonth() + 1)).slice(-2) +
+                ("0" + date.getDate()).slice(-2) +
+                ("0" + date.getHours()).slice(-2) +
+                ("0" + date.getMinutes()).slice(-2) +
+                ("0" + date.getSeconds()).slice(-2);
     const order = {
       ID: orderID,
       orderDate: new Date(),
@@ -194,8 +276,9 @@ module.exports = async function () {
       materialCode: requisition.materialCode,
       materialName: requisition.materialName,
       quantity: Number(requisition.quantity), // convert to integer
-      uom_name: requisition.uom_name,
+      uom: requisition.uom,
       wbsNo: requisition.wbsNo_number,
+      requirementDate:requisition.requirementDate
     }));
 
     await INSERT.into(OrderItems).entries(orderItems);
@@ -212,8 +295,10 @@ module.exports = async function () {
 
     let dataOrderInfo = await SELECT.from(Orders, O => {
       O`.*`,
-      O.items(I => {I`.*`})
+      O.items(I => {I`.*`}),
+      O.subcontractor(S => {S`.*`})
     }).where({ID: orderID});
+
 
     if (dataOrderInfo[0].items.length < 1) {
       req.error({
@@ -226,7 +311,7 @@ module.exports = async function () {
 
     await UPDATE.entity(Orders, orderID).set({
       approvalStatus: 'PENDING',
-      placedBy: 'swati'
+      placedBy: cds.context.user.id
     });
 
     let workflowContext = {}, sbpaWorkflowResponse, sbpaUserTaskInstances, orderApproval = {};
@@ -234,11 +319,13 @@ module.exports = async function () {
     workflowContext.orderdate = dataOrderInfo[0].orderDate.split('T')[0];
     workflowContext.placedby = dataOrderInfo[0].placedBy;
     workflowContext.materialgroup =dataOrderInfo[0].materialGroup;
+    workflowContext.approvername = dataOrderInfo[0].subcontractor.approverName;
+    workflowContext.approveremail = dataOrderInfo[0].subcontractor.approverEmailId;
     workflowContext.orderitem = dataOrderInfo[0].items.map(item => ({
       materialCode: item.materialCode,
       materialName: item.materialName,
       quantity: item.quantity.toString(),
-      uom_name: item.uom_name,
+      uom: item.uom,
       wbsNo: item.wbsNo,
     }));
 

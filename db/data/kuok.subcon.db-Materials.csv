@@ -1,4 +1,4 @@
-code,name,uom_name,descr,materialGroup_id,wbsNo_number,quantityAvlToBIssued,materialDepartment
+code,name,uom,descr,materialGroup_id,wbsNo_number,quantityAvlToBIssued,materialDepartment
 M1,Steel,kg,Steel- metal,G001,GT03639.T.E00027,10,DYP Steel
 M2,Wire,m,Electrical Wire,G002,GT03639.T.E00026,10,ABC Electrical
 M3,Plastic Bag,pcs,Plastic Bag,G003,GT03639.T.E00030,10,

@@ -1,1 +1,1 @@
-ID,orderID_ID,materialCode,materialName,quantity,uom_name,projectCode,wbsNo,requirementDate
+ID,orderID_ID,materialCode,materialName,quantity,uom,projectCode,wbsNo,requirementDate
