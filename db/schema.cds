@@ -8,7 +8,7 @@ using {
 
 entity SubContractorDetails{
     key emailId : String;
-    customerID:Integer;
+    customerID:String;
     customerName:String;
     vkOrg:String;
     date:Date;
@@ -22,8 +22,8 @@ entity SubContractorDetails{
 }
 
 entity Materials {
-    key code                 : String(255);
-        name                 : String(255);
+    key code                 : String;
+        name                 : String;
         uom                  : String;
         descr                : String(255);
         materialGroup        : Association to one MaterialGroups; // a material belongs to a group

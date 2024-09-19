@@ -30,10 +30,6 @@
         "db": "hana",
         "auth": "dummy"
       },
-      "API_PRODUCT_SRV": {
-        "kind": "odata-v2",
-        "model": "srv/external/API_PRODUCT_SRV"
-      },
       "metadata": {
         "kind": "odata-v2",
         "model": "srv/external/metadata",
@@ -46,15 +42,15 @@
         "kind": "odata-v2",
         "model": "srv/external/Z_SUBC_PLANT_C_CDS",
         "credentials": {
-          "destination": "kuok-subcontract-router",
-          "path": "/backend/sap/opu/odata/sap/Z_SUBC_PLANT_C_CDS"
+          "destination": "S4-API",
+          "path": "/sap/opu/odata/sap/Z_SUBC_PLANT_C_CDS"
         }
       },
       "Z_SUBC_PROJ_C_CDS": {
         "kind": "odata-v2",
         "model": "srv/external/Z_SUBC_PROJ_C_CDS",
         "credentials": {
-          "destination": "kuok-subcontract-router",
+          "destination": "S4-API",
           "path": "/sap/opu/odata/sap/Z_SUBC_PROJ_C_CDS"
         }
       },
@@ -62,48 +58,48 @@
         "kind": "odata-v2",
         "model": "srv/external/Z_SUBC_WBS_C_CDS",
         "credentials": {
-          "destination": "kuok-subcontract-router",
-          "path": "/backend/sap/opu/odata/sap/Z_SUBC_WBS_C_CDS"
+          "destination": "S4-API",
+          "path": "/sap/opu/odata/sap/Z_SUBC_WBS_C_CDS"
         }
       },
       "Z_SUBC_CUST_C_CDS": {
         "kind": "odata-v2",
         "model": "srv/external/Z_SUBC_CUST_C_CDS",
         "credentials": {
-          "destination": "kuok-subcontract-router",
-          "path": "/backend/sap/opu/odata/sap/Z_SUBC_CUST_C_CDS"
+          "destination": "S4-API",
+          "path": "/sap/opu/odata/sap/Z_SUBC_CUST_C_CDS"
         }
       },
       "Z_SUBC_MATKL_C_CDS": {
         "kind": "odata-v2",
         "model": "srv/external/Z_SUBC_MATKL_C_CDS",
         "credentials": {
-          "destination": "kuok-subcontract-router",
-          "path": "/backend/sap/opu/odata/sap/Z_SUBC_MATKL_C_CDS"
+          "destination": "S4-API",
+          "path": "/sap/opu/odata/sap/Z_SUBC_MATKL_C_CDS"
         }
       },
       "Z_SUBC_MATNR_C_CDS": {
         "kind": "odata-v2",
         "model": "srv/external/Z_SUBC_MATNR_C_CDS",
         "credentials": {
-          "destination": "kuok-subcontract-router",
-          "path": "/backend/sap/opu/odata/sap/Z_SUBC_MATNR_C_CDS"
+          "destination": "S4-API",
+          "path": "/sap/opu/odata/sap/Z_SUBC_MATNR_C_CDS"
         }
       },
       "ZAPI_001_RFC_SUBCON_POST_SRV": {
         "kind": "odata-v2",
         "model": "srv/external/ZAPI_001_RFC_SUBCON_POST_SRV",
         "credentials": {
-          "destination": "kuok-subcontract-router",
-          "path": "/backend/sap/opu/odata/sap/ZAPI_001_RFC_SUBCON_POST_SRV"
+          "destination": "S4-API",
+          "path": "/sap/opu/odata/sap/ZAPI_001_RFC_SUBCON_POST_SRV"
         }
       },
       "Z_SUBC_DEPT_C_CDS": {
         "kind": "odata-v2",
         "model": "srv/external/Z_SUBC_DEPT_C_CDS",
         "credentials": {
-          "destination": "kuok-subcontract-router",
-          "path": "/backend/sap/opu/odata/sap/Z_SUBC_DEPT_C_CDS"
+          "destination": "S4-API",
+          "path": "/sap/opu/odata/sap/Z_SUBC_DEPT_C_CDS"
         }
       }
     }

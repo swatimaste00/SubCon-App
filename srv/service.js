@@ -5,13 +5,14 @@ const { uuid } = cds.utils;
 module.exports = async function () {
 
   const db = await cds.connect.to('db'); // connect to database service
-  const { Materials, MaterialRequisitions ,Orders,OrderItems, Z_SUBC_PLANT_C,MRApprovals,Plants,Projects,WBSElements, SubContractorDetails,Departments} = cds.entities; // get reflected definitions
+  const { Materials, MaterialRequisitions ,Orders,OrderItems,Z_SUBC_CUST_C, Z_SUBC_PLANT_C,Z_SUBC_DEPT_C,Z_SUBC_PROJ_C,Z_SUBC_wbs_C,Z_SUBC_MATKL_C,Z_SUBC_MATNR_C,MRApprovals,Plants,Projects,WBSElements, SubContractorDetails,Departments} = cds.entities; // get reflected definitions
 
 
   this.on("READ", "SubContractorDetails", async (req) => {
     var {email} = cds.context.user.id;
     const apiS4Srv = await cds.connect.to("Z_SUBC_CUST_C_CDS");
-    let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_CUST_C' });
+    let response = await apiS4Srv.run(SELECT.from('Z_SUBC_CUST_C'));
+    //let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_CUST_C' });
   
     // Transform the response to map werks -> code and name1 -> name
     const transformedData = response.map(item => ({
@@ -32,6 +33,7 @@ module.exports = async function () {
       const date = new Date();
       const formattedDate = date.toLocaleDateString('en-GB').split('/').join('-');
       subcontractor.date = formattedDate;
+      subcon
       console.log("subcontractor", subcontractor);
       return subcontractor;
     }    
@@ -39,8 +41,8 @@ module.exports = async function () {
       var date = new Date();
       const formattedDate = date.toLocaleDateString('en-GB').split('/').join('-');
       tempData["emailId"] ="swati.maste@sap.com",
-      tempData["customerID"] = 11002773,
-      tempData["customerName"] = "ABC Pvt. Ltd."
+      tempData["customerID"] = "11002773",
+      tempData["customerName"] = "ABC Pvt Ltd"
       tempData["vkOrg"] ="DA11",     
       tempData["date"] = formattedDate;
       //console.log("tempData", tempData);
@@ -52,7 +54,49 @@ module.exports = async function () {
 
  // destination
   this.on('READ', 'Z_SUBC_PLANT_C', async (req) => {
-    const apiS4Srv = await cds.connect.to("metadata");
+    const apiS4Srv = await cds.connect.to("Z_SUBC_PLANT_C_CDS");
+    let response = await apiS4Srv.run(req.query);
+    console.log("response", response);
+    return response;
+  });
+
+  this.on('READ', 'Z_SUBC_CUST_C', async (req) => {
+    const apiS4Srv = await cds.connect.to("Z_SUBC_CUST_C_CDS");
+    let response = await apiS4Srv.run(req.query);
+    console.log("response", response);
+    return response;
+  });
+
+  this.on('READ', 'Z_SUBC_DEPT_C', async (req) => {
+    const apiS4Srv = await cds.connect.to("Z_SUBC_DEPT_C_CDS");
+    let response = await apiS4Srv.run(req.query);
+    console.log("response", response);
+    return response;
+  });
+
+  this.on('READ', 'Z_SUBC_MATKL_C', async (req) => {
+    const apiS4Srv = await cds.connect.to("Z_SUBC_MATKL_C_CDS");
+    let response = await apiS4Srv.run(req.query);
+    console.log("response", response);
+    return response;
+  });
+
+  this.on('READ', 'Z_SUBC_MATNR_C', async (req) => {
+    const apiS4Srv = await cds.connect.to("Z_SUBC_MATNR_C_CDS");
+    let response = await apiS4Srv.run(req.query);
+    console.log("response", response);
+    return response;
+  });
+
+  this.on('READ', 'Z_SUBC_PROJ_C', async (req) => {
+    const apiS4Srv = await cds.connect.to("Z_SUBC_PROJ_C_CDS");
+    let response = await apiS4Srv.run(req.query);
+    console.log("response", response);
+    return response;
+  });
+
+  this.on('READ', 'Z_SUBC_wbs_C', async (req) => {
+    const apiS4Srv = await cds.connect.to("Z_SUBC_WBS_C_CDS");
     let response = await apiS4Srv.run(req.query);
     console.log("response", response);
     return response;
@@ -61,7 +105,8 @@ module.exports = async function () {
   //Z_SUBC_DEPT_C_CDS API
   this.on('READ', 'Departments', async (req) => {
     const apiS4Srv = await cds.connect.to("Z_SUBC_DEPT_C_CDS");
-    let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_DEPT_C' });
+    let response = await apiS4Srv.run(SELECT.from('Z_SUBC_DEPT_C'));
+    //let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_DEPT_C' });
 
     //console.log("response", response);
   
@@ -75,15 +120,17 @@ module.exports = async function () {
     }));
   
     //console.log('Hello transformedData',transformedData);
+    transformedData['$count'] = transformedData.length;
   
-     return transformedData;
+    return transformedData;
   });
   
 
     //Z_SUBC_MATKL_C_CDS API
     this.on('READ', 'MaterialGroups', async (req) => {
       const apiS4Srv = await cds.connect.to("Z_SUBC_MATKL_C_CDS");
-      let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_MATKL_C' });
+      let response = await apiS4Srv.run(SELECT.from('Z_SUBC_MATKL_C'));
+      //let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_MATKL_C' });
   
       //console.log("response", response);
     
@@ -95,17 +142,20 @@ module.exports = async function () {
       }));
     
       //console.log('Hello transformedData',transformedData);
+      transformedData['$count'] = transformedData.length;
     
-       return transformedData;
+      return transformedData;
     });
     
      //Z_SUBC_MATNR_C_CDS API
      this.on('READ', 'Materials', async (req) => {
       const apiS4Srv = await cds.connect.to("Z_SUBC_MATNR_C_CDS");
-      let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_MATNR_C' });
+      let response = await apiS4Srv.run(SELECT.from('Z_SUBC_MATNR_C').where({matnr:'ABRA-011-06-0001'}));
+      //let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_MATNR_C' });
   
       //console.log("response", response);
     
+      response = response.slice(0, 20);
       // Transform the response to map werks -> code and name1 -> name
       const transformedData = response.map(item => ({
         code: item.matnr,
@@ -113,15 +163,18 @@ module.exports = async function () {
         uom:item.meins,
         plant_code:item.werks,
       }));
+
     
       console.log('Hello transformedData',transformedData);
+      transformedData['$count'] = transformedData.length;
     
       return transformedData;
     });
 
   this.on('READ', 'Plants', async (req) => {
-    const apiS4Srv = await cds.connect.to("Z_SUBC_PLANT_C_CDS");
-    let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_PLANT_C' });
+    const apiS4Srv = await cds.connect.to("metadata");
+    let response = await apiS4Srv.run(SELECT.from('Z_SUBC_PLANT_C'));
+    //let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_PLANT_C' });
   
     // Transform the response to map werks -> code and name1 -> name
     const transformedData = response.map(item => ({
@@ -130,6 +183,7 @@ module.exports = async function () {
     }));
   
     //console.log('transformedData',transformedData);
+    transformedData['$count'] = transformedData.length;
   
     return transformedData;
   });
@@ -137,7 +191,8 @@ module.exports = async function () {
   
   this.on('READ', 'Projects', async (req) => {
     const apiS4Srv = await cds.connect.to("Z_SUBC_PROJ_C_CDS");
-    let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_PROJ_C' });
+    let response = await apiS4Srv.run(SELECT.from('Z_SUBC_PROJ_C'));
+    //let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_PROJ_C' });
     //console.log(response);
 
     const transformedData = response.map(item => ({
@@ -146,6 +201,7 @@ module.exports = async function () {
     }));
   
     //console.log('transformedData',transformedData);
+    transformedData['$count'] = transformedData.length;
     return transformedData;
   
 
@@ -154,7 +210,8 @@ module.exports = async function () {
 
   this.on('READ', 'WBSElements', async (req) => {
     const apiS4Srv = await cds.connect.to("Z_SUBC_WBS_C_CDS");
-    let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_wbs_C' });
+    let response = await apiS4Srv.run(SELECT.from('Z_SUBC_wbs_C'));
+    //let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_wbs_C' });
     //console.log(response);
 
     const transformedData = response.map(item => ({
@@ -165,6 +222,7 @@ module.exports = async function () {
     }));
   
     //console.log('transformedData',transformedData);
+    transformedData['$count'] = transformedData.length;
   
     return transformedData;
   
