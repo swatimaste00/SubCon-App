@@ -1,1 +1,1 @@
-emailId,customerID,customerName,vkOrg,date,plant_code,project_code,department_code,approverName,approverEmailId
+emailId,customerID,customerName,Salesorg,date,plant,project,department,approverName,approverEmailId

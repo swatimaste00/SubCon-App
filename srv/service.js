@@ -1,5 +1,6 @@
 const cds = require('@sap/cds');
 const utilitySBPA = require("./utils/utilitySBPA");
+const unixTimeConverter =require("./utils/unixTimeConverter");
 const { uuid } = cds.utils;
 
 module.exports = async function () {
@@ -9,48 +10,12 @@ module.exports = async function () {
 
 
   this.on("READ", "SubContractorDetails", async (req) => {
-    var {email} = cds.context.user.id;
-    const apiS4Srv = await cds.connect.to("Z_SUBC_CUST_C_CDS");
-    let response = await apiS4Srv.run(SELECT.from('Z_SUBC_CUST_C'));
-    //let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_CUST_C' });
-  
-    // Transform the response to map werks -> code and name1 -> name
-    const transformedData = response.map(item => ({
-      customerID: item.partner,
-      customerName: item.name,
-      emailId:item.email,
-      vkOrg:item.vkorg
-        
-    }));
-
-    var tempData ={};
-  
-    //console.log('transformedData',transformedData);
-
+    const email = cds.context.user.id;
     var subcontractor = await SELECT.one.from(SubContractorDetails).where({ emailId: email });
+    return subcontractor;
 
-    if (subcontractor) {
-      const date = new Date();
-      const formattedDate = date.toLocaleDateString('en-GB').split('/').join('-');
-      subcontractor.date = formattedDate;
-      subcon
-      console.log("subcontractor", subcontractor);
-      return subcontractor;
-    }    
-    else{
-      var date = new Date();
-      const formattedDate = date.toLocaleDateString('en-GB').split('/').join('-');
-      tempData["emailId"] ="swati.maste@sap.com",
-      tempData["customerID"] = "11002773",
-      tempData["customerName"] = "ABC Pvt Ltd"
-      tempData["vkOrg"] ="DA11",     
-      tempData["date"] = formattedDate;
-      //console.log("tempData", tempData);
-      return tempData;
+});
 
-    }
-    
-  });
 
  // destination
   this.on('READ', 'Z_SUBC_PLANT_C', async (req) => {
@@ -150,12 +115,12 @@ module.exports = async function () {
      //Z_SUBC_MATNR_C_CDS API
      this.on('READ', 'Materials', async (req) => {
       const apiS4Srv = await cds.connect.to("Z_SUBC_MATNR_C_CDS");
-      let response = await apiS4Srv.run(SELECT.from('Z_SUBC_MATNR_C').where({matnr:'ABRA-011-06-0001'}));
+      let response = await apiS4Srv.run(SELECT.from('Z_SUBC_MATNR_C'));
       //let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_MATNR_C' });
   
       //console.log("response", response);
     
-      response = response.slice(0, 20);
+      //response = response.slice(0, 20);
       // Transform the response to map werks -> code and name1 -> name
       const transformedData = response.map(item => ({
         code: item.matnr,
@@ -171,22 +136,40 @@ module.exports = async function () {
       return transformedData;
     });
 
+  // this.on('READ', 'Plants', async (req) => {
+  //   const apiS4Srv = await cds.connect.to("metadata");
+  //   let response = await apiS4Srv.run(SELECT.from('Z_SUBC_PLANT_C'));
+  //   //let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_PLANT_C' });
+  
+  //   // Transform the response to map werks -> code and name1 -> name
+  //   const transformedData = response.map(item => ({
+  //     code: item.werks,
+  //     name: item.name1
+  //   }));
+  
+  //   //console.log('transformedData',transformedData);
+  //   transformedData['$count'] = transformedData.length;
+  
+  //   return transformedData;
+  // });
+
+  //Testing DO
+
   this.on('READ', 'Plants', async (req) => {
-    const apiS4Srv = await cds.connect.to("metadata");
-    let response = await apiS4Srv.run(SELECT.from('Z_SUBC_PLANT_C'));
-    //let response = await apiS4Srv.send({ method: 'GET', path: 'Z_SUBC_PLANT_C' });
-  
-    // Transform the response to map werks -> code and name1 -> name
-    const transformedData = response.map(item => ({
-      code: item.werks,
-      name: item.name1
-    }));
-  
-    //console.log('transformedData',transformedData);
-    transformedData['$count'] = transformedData.length;
-  
-    return transformedData;
+    var payload ={"Salesorg":"DA11","DistrChan":"MI","Division":"00","ShipTo":"0024000051","RequestNo":"4125","Bname":"VASEEM.M","RequestedBy":"VASEEM.M","ImReqDate":"\/Date(1726006830000)\/","ProcessingType":"3","AppIdImp":"","Delivery":"","Items":[{"RequestNo":"4125","Itemno":"1","Plant":"DA11","MatCode":"ABRA-011-01-0003","MatText":"","Uom":"EA","ReqQty":"20","IssQty":"7","PrjCode":"ST04800","SeqCode":"ST04800.T.E00001"},{"RequestNo":"4125","Itemno":"2","Plant":"DA11","MatCode":"ABRA-011-01-0003","MatText":"","Uom":"EA","ReqQty":"20","IssQty":"7","PrjCode":"ST04800","SeqCode":"ST04800.T.E00001"}]};
+    
+    try{
+      const apiS4Srv = await cds.connect.to("ZAPI_001_RFC_SUBCON_POST_SRV");
+    let response = await apiS4Srv.send('/SubconRequestSet',payload);
+    console.log("Create DO response", response);
+    return response;
+
+    }catch(error){
+      console.log("error in creating DO",error)
+    }
+    
   });
+
 
   
   this.on('READ', 'Projects', async (req) => {
@@ -229,71 +212,106 @@ module.exports = async function () {
   });
 
   this.on("setplantProjectDeptDetails", async (req) => {
-    const { projectCode, plant,department } = req.data;
+    const { customerID, customerName,plant, projectCode, department, vkOrg } = req.data;
 
     // Get the email of the currently logged-in user
-    var {email} = cds.context.user.id;
-    if(!email){
-      email = "swati.maste@sap.com"
+    var { email } = cds.context.user.id;
+    if (!email) {
+        email = "swati.maste@sap.com";
     }
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleDateString('en-GB').split('/').join('-');
 
     // Fetch the approver details from the Departments entity based on the selected department
-    const departmentDetails = await SELECT.one.from(Departments)
-        .where({ code: department });
+    const apiS4Srv = await cds.connect.to("Z_SUBC_DEPT_C_CDS");
+    let response = await apiS4Srv.run(SELECT.one.from('Z_SUBC_DEPT_C').where({ kostl: department }));
+    if (!response) {
+      return req.error(404, `Department with code ${department} not found`);
+  }
 
-    if (!departmentDetails) {
-        return req.error(404, `Department with code ${department} not found`);
+    const Group = await cds.connect.to("Z_SUBC_MATKL_C_CDS");
+    let materialGroup = await Group.run(SELECT.from('Z_SUBC_MATKL_C').columns `matkl`.where({ werks: plant }));
+
+
+    var details = {
+        emailId: email,
+        customerID: customerID,
+        customerName: customerName,
+        Salesorg: vkOrg,
+        date: new Date(),
+        plant: plant,
+        project: projectCode,
+        department: department,
+        approverName: response.verak_user,
+        approverEmailId: response.SMTP_ADDR
+    };
+
+    console.log(details);
+
+    // Check if an entry with the same email already exists in SubContractorDetails
+    let existingEntry = await SELECT.one.from(SubContractorDetails).where({ emailId: email });
+
+    if (existingEntry) {
+        // If the entry exists, update it with the latest details
+        await UPDATE(SubContractorDetails).set(details).where({ emailId: email });
+        console.log("Update Success");
+    } else {
+        // If no entry exists, insert a new one
+        await INSERT.into(SubContractorDetails).entries(details);
+        console.log("Insert Success");
     }
 
-    // Update the SubContractorDetails entity with the provided plant and project values
-    await UPDATE(SubContractorDetails)
-        .set({
-            plant_code: plant,
-            project_code: projectCode,
-            department_code:department,
-            pproverName: departmentDetails.approverName,
-            approverEmailId: departmentDetails.approverEmailId
-        })
-        .where({ emailId: email });
-
-        console.log("Update Success")
-
 });
+
 
 
   this.on("requestMaterial", async (req) => {
     const { materialCode, quantity, wbsNo ,requirementDate} = req.data;
     
-    // Check if material exists
-    const material = await SELECT.one.from(Materials).where({ code: materialCode });
+
+    const apiS4Srv = await cds.connect.to("Z_SUBC_MATNR_C_CDS");
+    let material = await apiS4Srv.run(SELECT.one.from('Z_SUBC_MATNR_C').where({ matnr: materialCode }));
     if (!material) {
       return req.error(404, `Material with code ${materialCode} not found`);
-    }
+  }
 
     // Fetch uom and materialName from the Materials entity
-    const uom = material.uom;
-    const materialName = material.name;
-    const quantityAvlToBIssued = material.quantityAvlToBIssued;
+    const uom = material.meins;
+    const materialName = material.maktx;
     const requestedQuantity = Number(quantity);
-    const availableQuantity = Number(quantityAvlToBIssued);
-    const materialGroup =material.materialGroup_id;
-    console.log("material.materialGroup_id",material.materialGroup_id);
+    const materialGroup =material.matkl;
+    console.log("material.matkl",material.matkl);
 
-    if (requestedQuantity > availableQuantity) {
-      return req.error(400, 'Insufficient goods available');
+    const date = new Date();
+    const ReqNo = date.getFullYear().toString() +
+                ("0" + (date.getMonth() + 1)).slice(-2) +
+                ("0" + date.getDate()).slice(-2) +
+                ("0" + date.getHours()).slice(-2) +
+                ("0" + date.getMinutes()).slice(-2) +
+                ("0" + date.getSeconds()).slice(-2);
+
+    const requirementDateObj = new Date(requirementDate);
+
+    // Convert requirementDate to Unix timestamp (milliseconds)
+    if (isNaN(requirementDateObj.getTime())) {
+        return req.error(400, "Invalid requirementDate format");
     }
+    
+    const ImReqDate = requirementDateObj.getTime(); // Convert to Unix time
+    const formattedImReqDate = `\\/Date(${ImReqDate})\\/`; 
 
-    // Create a new material requisition entry
+
     const materialRequisition = {
-      ID: cds.utils.uuid(), // generate a unique ID
+      ID: ReqNo, // generate a unique ID
       materialCode:req.data.materialCode,
-      quantity:quantity,
+      quantity:requestedQuantity,
+      ImReqDate:formattedImReqDate,
       uom: uom,
       requirementDate:requirementDate,
       materialName:materialName,
-      wbsNo_number: wbsNo, // assuming this is the correct foreign key field name
+      wbsNo: wbsNo, // assuming this is the correct foreign key field name
       submittedBy: cds.context.user.id, // assuming the user submitting the request
-      materialGroup:material.materialGroup_id
+      materialGroup:materialGroup
     };
     
     await INSERT.into(MaterialRequisitions).entries(materialRequisition);
@@ -308,54 +326,99 @@ module.exports = async function () {
 
   this.on("placeOrder", async (req) => {
     const materialRequisitions = await SELECT.from(MaterialRequisitions);
+    const SubContractorInfo = await SELECT.one.from(SubContractorDetails).where({emailId:cds.context.user.id});
+
     if (materialRequisitions.length === 0) {
       return req.error(400, 'No items in the cart to place an order');
     }
-    const date = new Date();
-    const orderID = date.getFullYear().toString() +
-                ("0" + (date.getMonth() + 1)).slice(-2) +
-                ("0" + date.getDate()).slice(-2) +
-                ("0" + date.getHours()).slice(-2) +
-                ("0" + date.getMinutes()).slice(-2) +
-                ("0" + date.getSeconds()).slice(-2);
+
+    const items = materialRequisitions.map(requisition => ({
+      RequestNo: requisition.ID, // this is the Order ID to which the items belong
+      Itemno:itemcount=itemcount+1,
+      Plant:SubContractorInfo.plant,
+      MatCode: requisition.materialCode,
+      MatText: requisition.materialName,
+      ReqQty: requisition.quantity, // convert to integer
+      UoM: requisition.uom,
+      PrjCode:SubContractorInfo.project,
+      SeqCode: requisition.wbsNo,
+    }));
+
+    var payload ={
+
+      Salesorg:SubContractorInfo.Salesorg,
+      DistrChan:"MI",
+      Division:"00",
+      ShipTo:SubContractorInfo.customerID,
+      RequestNo:materialRequisitions[0].ID,
+      Bname:cds.context.user.id,
+      RequestedBy:cds.context.user.id,
+      ImReqDate:materialRequisitions[0].requirementDate,
+      ProcessingType:"1",
+      AppIdImp:"",
+      Delivery:"",
+      Items:items
+    }
+
+    console.log("DO quantity check payload",payload);
+
+    try{
+      const apiS4Srv = await cds.connect.to("ZAPI_001_RFC_SUBCON_POST_SRV");
+      let payloadWithIssuedQty = await apiS4Srv.send('/SubconRequestSet',payload);
+      console.log("DO quantity check successful", payloadWithIssuedQty);
+      //return payloadWithIssuedQty;
+
+    }catch(error){
+      console.log("error DO quantity check",error)
+    }
+
+   
     const order = {
-      ID: orderID,
+      RequestNo: materialRequisitions[0].ID,
       orderDate: new Date(),
+      ImReqDate:payloadWithIssuedQty.ImReqDate,
       approvalStatus:'PENDING',
-      materialGroup:materialRequisitions[0].materialGroup,
+      DistrChan:"MI",
+      Division:"00",
+      department:SubContractorInfo.department,
+      approverName:SubContractorInfo.approverName,
+      approverEmailId:SubContractorInfo.approverEmailId,
       placedBy:cds.context.user.id // assuming the user placing the order
     };
 
     await INSERT.into(Orders).entries(order);
 
-    const orderItems = materialRequisitions.map(requisition => ({
-      ID: cds.utils.uuid(), // generate a new unique ID for order items
-      orderID: { ID: orderID }, // this is the Order ID to which the items belong
-      materialCode: requisition.materialCode,
-      materialName: requisition.materialName,
-      quantity: Number(requisition.quantity), // convert to integer
-      uom: requisition.uom,
-      wbsNo: requisition.wbsNo_number,
-      requirementDate:requisition.requirementDate
-    }));
+    const orderItems = payloadWithIssuedQty.Items.map((item) => ({
+      ID: cds.utils.uuid(),
+      RequestNo: order.RequestNo,
+      Itemno:item.Itemno, // Same RequestNo for all order items
+      Plant: item.Plant,
+      MatCode: item.MatCode,
+      MatText: item.MatText, // Use API MatText if available
+      ReqQty: item.ReqQty,
+      IssQty: item.IssQty, // Issued Quantity from API response
+      UoM: item.Uom,
+      PrjCode: item.PrjCode,
+      SeqCode: item.SeqCode
+  }));
 
     await INSERT.into(OrderItems).entries(orderItems);
 
     // Clear the cart after placing the order
     await DELETE.from(MaterialRequisitions);
 
+    console.log(", with orderID", order.RequestNo)
 
-    return { message: 'Order placed successfully', orderID: orderID };
   });
 
   this.after("placeOrder", async (orderData, req) => {
-    const orderID = orderData.orderID;  // Get the order ID from the previous hook's response
+    const orderID = orderData.RequestNo;  // Get the order ID from the previous hook's response
 
     let dataOrderInfo = await SELECT.from(Orders, O => {
       O`.*`,
       O.items(I => {I`.*`}),
       O.subcontractor(S => {S`.*`})
-    }).where({ID: orderID});
+    }).where({RequestNo: orderID});
 
 
     if (dataOrderInfo[0].items.length < 1) {
@@ -367,24 +430,37 @@ module.exports = async function () {
       return;
     }
 
-    await UPDATE.entity(Orders, orderID).set({
-      approvalStatus: 'PENDING',
-      placedBy: cds.context.user.id
-    });
+    // await UPDATE.entity(Orders, orderID).set({
+    //   approvalStatus: 'PENDING',
+    //   placedBy: cds.context.user.id
+    // });
 
-    let workflowContext = {}, sbpaWorkflowResponse, sbpaUserTaskInstances, orderApproval = {};
-    workflowContext.orderId = dataOrderInfo[0].ID;
+    let workflowContext = {}, sbpaWorkflowResponse, sbpaUserTaskInstances, orderApproval = {}, itemCount=0;
+    workflowContext.salesorg = dataOrderInfo[0].subcontractor.Salesorg;
+    workflowContext.distrchan = dataOrderInfo[0].DistrChan;
+    workflowContext.division = dataOrderInfo[0].Division;
+    workflowContext.shipto = dataOrderInfo[0].subcontractor.customerID;
+    workflowContext.requestno = dataOrderInfo[0].RequestNo;
+    workflowContext.bname = dataOrderInfo[0].placedBy;
+    workflowContext.requestedby = dataOrderInfo[0].placedBy;
+    workflowContext.imreqdate = dataOrderInfo[0].ImReqDate;
+    workflowContext.processingtype = "3";
+    workflowContext.appidimp = "";
+    workflowContext.delivery = "";
     workflowContext.orderdate = dataOrderInfo[0].orderDate.split('T')[0];
-    workflowContext.placedby = dataOrderInfo[0].placedBy;
-    workflowContext.materialgroup =dataOrderInfo[0].materialGroup;
     workflowContext.approvername = dataOrderInfo[0].subcontractor.approverName;
     workflowContext.approveremail = dataOrderInfo[0].subcontractor.approverEmailId;
-    workflowContext.orderitem = dataOrderInfo[0].items.map(item => ({
-      materialCode: item.materialCode,
-      materialName: item.materialName,
-      quantity: item.quantity.toString(),
-      uom: item.uom,
-      wbsNo: item.wbsNo,
+    workflowContext.items = dataOrderInfo[0].items.map(item => ({
+      UoM: item.UoM,
+      RequestNo:item.RequestNo,
+      Itemno : item.Itemno,
+      Plant:item.Plant,
+      MatCode: item.MatCode,
+      MatText: item.MatText,
+      ReqQty: item.ReqQty,
+      IssQty: item.IssQty,
+      PrjCode: item.PrjCode,
+      SeqCode: item.SeqCode,
     }));
 
     // Call SBPA API to start the workflow
@@ -393,7 +469,7 @@ module.exports = async function () {
       let sbpaWorkflowResponse = await utilitySBPA.createOrderApprovalProcess(workflowContext);
 
       // Update the Order with workflowInstanceId
-      await UPDATE.entity(Orders).where({ ID: orderID }).set({
+      await UPDATE.entity(Orders).where({ RequestNo: orderID }).set({
         workflowInstanceId: sbpaWorkflowResponse.id
       });
 
@@ -409,9 +485,9 @@ module.exports = async function () {
 });
 
 this.on("getWorkflowStatus", async (req) => {
-  const orderID = req.data.orderID;
+  const orderID = req.data.RequestNo;
 
-  let orderData = await SELECT.one.from(Orders).where({ ID: orderID });
+  let orderData = await SELECT.one.from(Orders).where({ RequestNo: orderID });
 
   if (!orderData || !orderData.workflowInstanceId) {
       req.error({
@@ -430,7 +506,7 @@ this.on("getWorkflowStatus", async (req) => {
       // Update the approvalStatus in the Orders entity
       await UPDATE(Orders)
         .set({ approvalStatus: workflowStatus.status })
-        .where({ ID: orderID });
+        .where({ RequestNo: orderID });
 
       console.log(workflowStatus);
       return workflowStatus;

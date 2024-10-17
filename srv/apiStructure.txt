@@ -1,0 +1,50 @@
+
+entity Customer{
+    key emailId : String;
+    customerID:String;
+    customerName:String;
+    vkOrg:String;
+    date:Date;
+}
+
+entity Materials {
+    key code                 : String;
+        name                 : String;
+        uom                  : String;
+        plant:Association to one Plants;
+}
+
+entity WBSElements {
+    key number      : String(255);
+        description : String(255);
+        project : Association to Projects;
+        
+}
+
+entity Plants{
+    key code:String(255);
+    name:String(255);
+
+}
+
+entity Departments{
+    key code:String(255);
+    plant:Association to one Plants;
+    name:String(255);
+    approverName:String;
+    approverEmailId:String;
+
+}
+
+entity Projects {
+    key code        : String(255);
+        description : String(255);
+        elements : Composition of many WBSElements on elements.project = $self;
+}
+
+entity MaterialGroups {
+    key id   : String(255);
+        name : String(255);
+        plant:Association to one Plants;
+}
+

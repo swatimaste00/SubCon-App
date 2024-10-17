@@ -1,6 +1,6 @@
 {
  "meta": {
-  "creator": "cds-dk 7.8.0"
+  "creator": "cds-dk 8.2.2"
  },
  "$version": "2.0",
  "definitions": {
@@ -48,6 +48,16 @@
     "name": {
      "type": "cds.String",
      "length": 81,
+     "@sap.display.format": "UpperCase"
+    },
+    "email": {
+     "type": "cds.String",
+     "length": 241,
+     "@sap.label": "E-Mail Address"
+    },
+    "email_u": {
+     "type": "cds.String",
+     "length": 241,
      "@sap.display.format": "UpperCase"
     }
    }

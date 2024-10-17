@@ -37,14 +37,14 @@ GET  http://localhost:4004/cart/MaterialRequisitions
 
 
 ### Add Item to Cart
-POST http://localhost:4004/cart/requestMaterial
+POST https://kuok--singapore--limited-devksl-3bk1u0k3-dev-subcon-app-srv.cfapps.ap11.hana.ondemand.com/cart/requestMaterial
 Content-Type: application/json
 
 {
-  "materialCode": "M2",
+  "materialCode": "ABRA-011-01-0003",
   "quantity": "10",
-  "wbsNo": "WBS002",
-  "requirementDate":"2024-08-31"
+  "wbsNo": "ST04800.T.E00001",
+  "requirementDate":"2024-11-01T12:00:00Z"
 }
 
 ### Add Another Item to Cart
@@ -60,7 +60,7 @@ Content-Type: application/json
 
 
 ### Place Order
-POST http://localhost:4004/cart/placeOrder
+POST https://kuok--singapore--limited-devksl-3bk1u0k3-dev-subcon-app-srv.cfapps.ap11.hana.ondemand.com/cart/placeOrder
 Content-Type: application/json
 
 {}
@@ -76,13 +76,16 @@ GET http://localhost:4004/cart/SubContractorDetails
 
 
 ### Get Workflow Status
-POST http://localhost:36887/cart/setplantProjectDeptDetails
+POST http://localhost:4004/cart/setplantProjectDeptDetails
 Content-Type: application/json
 
 {
-  "plant": "PLANT01",
+  "customerID":"21002773",
+  "customerName":"BORR GRID INC (MARSHALL ISL)",
+  "plant": "DA11",
   "projectCode": "PROJECT123",
-  "department":"dept1"
+  "department":"DA11PSL",
+  "vkOrg":"DA12"
 }
 
 
@@ -100,8 +103,16 @@ Content-Type: application/json
   "orderID":"8a3d3d8d-1d9d-4791-bf55-18b60164879f"
 }
 
-###
-GET https://kuok--singapore--limited-devksl-3bk1u0k3-dev-subcon-app-srv.cfapps.ap11.hana.ondemand.com/cart/Projects
+### Get Workflow Status
+POST http://localhost:4004/cart/getWorkflowStatus
+Content-Type: application/json
+
+{
+  "orderID":"8a3d3d8d-1d9d-4791-bf55-18b60164879f"
+}
+
+### create DO
+GET https://kuok--singapore--limited-devksl-3bk1u0k3-dev-subcon-app-srv.cfapps.ap11.hana.ondemand.com/cart/Plants
 ### Retrieve Orders
 GET https://gamification-qga2hkdu-dev-subcon-app-srv.cfapps.eu20.hana.ondemand.com/cart/Orders
 

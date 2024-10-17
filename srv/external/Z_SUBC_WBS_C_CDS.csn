@@ -1,6 +1,6 @@
 {
  "meta": {
-  "creator": "cds-dk 7.8.0"
+  "creator": "cds-dk 8.2.2"
  },
  "$version": "2.0",
  "definitions": {
@@ -33,6 +33,12 @@
      "length": 40,
      "@sap.label": "Description",
      "@sap.quickinfo": "PS: Short description (1st text line)"
+    },
+    "werks": {
+     "type": "cds.String",
+     "length": 4,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Plant"
     },
     "posid": {
      "type": "cds.String",

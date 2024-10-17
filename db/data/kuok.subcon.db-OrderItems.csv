@@ -1,1 +1,1 @@
-ID,orderID_ID,materialCode,materialName,quantity,uom,wbsNo,requirementDate
+ID,RequestNo_RequestNo,Itemno,Plant,MatCode,MatText,UoM,ReqQty,IssQty,PrjCode,SeqCode

@@ -1,6 +1,6 @@
 {
  "meta": {
-  "creator": "cds-dk 7.8.0"
+  "creator": "cds-dk 8.2.2"
  },
  "$version": "2.0",
  "definitions": {
@@ -26,6 +26,14 @@
      "length": 4,
      "@sap.display.format": "UpperCase",
      "@sap.label": "Plant",
+     "notNull": true
+    },
+    "matkl": {
+     "key": true,
+     "type": "cds.String",
+     "length": 9,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Material Group",
      "notNull": true
     },
     "matnr": {

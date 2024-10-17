@@ -1,1 +1,1 @@
-ID,orderDate,placedBy,workflowInstanceId,workflowApproverNext,approvalStatus,rejectionRemarks,materialGroup,subcontractor_emailId
+RequestNo,ImReqDate,orderDate,DistrChan,Division,placedBy,workflowInstanceId,workflowApproverNext,approvalStatus,rejectionRemarks,subcontractor_emailId

@@ -6,6 +6,7 @@ using {Z_SUBC_WBS_C_CDS as Wbs} from './external/Z_SUBC_WBS_C_CDS';
 using {Z_SUBC_MATKL_C_CDS as MaterialGroup} from './external/Z_SUBC_MATKL_C_CDS';
 using {Z_SUBC_MATNR_C_CDS as Material} from './external/Z_SUBC_MATNR_C_CDS';
 using {Z_SUBC_CUST_C_CDS as Customer} from './external/Z_SUBC_CUST_C_CDS';
+using {ZAPI_001_RFC_SUBCON_REQ_POST_SRV as DO} from './external/ZAPI_001_RFC_SUBCON_REQ_POST_SRV';
 
 
 service SubConService @(path:'/cart') { 
@@ -20,7 +21,7 @@ service SubConService @(path:'/cart') {
   entity Projects as projection on db.Projects;
   entity Z_SUBC_PLANT_C as projection on Plant.Z_SUBC_PLANT_C;
   entity Z_SUBC_PROJ_C as projection on Project.Z_SUBC_PROJ_C;
-  entity Z_SUBC_WBS_C as projection on Wbs.Z_SUBC_wbs_C;
+  entity Z_SUBC_wbs_C as projection on Wbs.Z_SUBC_wbs_C;
   entity Z_SUBC_DEPT_C as projection on Dept.Z_SUBC_DEPT_C;
   entity Z_SUBC_MATKL_C as projection on MaterialGroup.Z_SUBC_MATKL_C;
   entity Z_SUBC_MATNR_C as projection on Material.Z_SUBC_MATNR_C;
@@ -28,18 +29,11 @@ service SubConService @(path:'/cart') {
   entity MRApprovals as projection on db.MRApprovals;
   entity SubContractorDetails as projection on db.SubContractorDetails;
   entity Departments as projection on db.Departments;
-  action requestMaterial(  materialCode: String,quantity : String, wbsNo:String,requirementDate:Date);
+  entity ZAPI_001_RFC_SUBCON_REQ_POST_SRV as projection on DO.SubconRequestSet;
+  action requestMaterial(  materialCode: String,quantity : String, wbsNo:String,requirementDate:DateTime);
   action clearCart();
   action placeOrder();
   action getWorkflowStatus(orderID:UUID);
-  action setplantProjectDeptDetails(plant : String,projectCode: String,department :String);
-}
-
-type MaterialData {
-  materialCode: String;
-    quantity : Integer;
-    wbsNo:String;
-    plant : String;
-    projectCode: String;
-
+  action setplantProjectDeptDetails(customerID:String, customerName:String, plant : String, projectCode: String, department :String, vkOrg:String);
+  action createDO();
 }

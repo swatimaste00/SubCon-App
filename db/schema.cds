@@ -10,11 +10,11 @@ entity SubContractorDetails{
     key emailId : String;
     customerID:String;
     customerName:String;
-    vkOrg:String;
+    Salesorg:String;
     date:Date;
-    plant:Association to one Plants;
-    project:Association to one Projects;
-    department:Association to one Departments;
+    plant:String;
+    project:String;
+    department:String;
     approverName:String;
     approverEmailId:String;
     orders: Composition of many Orders on orders.subcontractor = $self;
@@ -25,12 +25,6 @@ entity Materials {
     key code                 : String;
         name                 : String;
         uom                  : String;
-        descr                : String(255);
-        materialGroup        : Association to one MaterialGroups; // a material belongs to a group
-        wbsNo                : Association to one WBSElements;
-        quantityAvlToBIssued : String;
-        materialDepartment:String;
-        materialRequisition  : Association to MaterialRequisitions;
         plant:Association to one Plants;
 }
 
@@ -74,18 +68,17 @@ entity UoMs {
 }
 
 entity MaterialRequisitions {
-    key ID                   : UUID;
-        materials            : Composition of many Materials
-                                   on materials.materialRequisition = $self;
-        wbsNo                : Association to one WBSElements;
+    key ID                   : Integer64;
+        wbsNo                : String(255);
         materialCode         : String(255);
         materialGroup:String;
-        quantity             : String;
+        quantity             : Integer;
         uom                  : String;
         materialName         : String(255);
-        requirementDate: Date;
+        requirementDate: DateTime;
         quantityAvlToBIssued : String;
         submittedBy          : String(255);
+        ImReqDate:String;
 
 
 }
@@ -100,26 +93,31 @@ entity MRApprovals : cuid, managed {
 }
 
 entity Orders {
-    key ID                   : String;
+    key RequestNo                   : Integer64;
+        ImReqDate:String;
         orderDate            : DateTime;
+        DistrChan:String;
+        Division:String;
         placedBy             : String;
         workflowInstanceId   : UUID;
         workflowApproverNext : User;
         approvalStatus       : String(255);
         rejectionRemarks     : String(256);
-        items : Composition of many OrderItems on items.orderID = $self;
-        materialGroup:String;
+        items : Composition of many OrderItems on items.RequestNo = $self;
         subcontractor:Association to one SubContractorDetails;
 }
 
 entity OrderItems {
     key ID           : UUID;
-        orderID      : Association to Orders;
-        materialCode : String;
-        materialName : String;
-        quantity     : Integer;
-        uom     : String;
-        wbsNo        : String;
-        requirementDate:Date;
+        RequestNo      : Association to Orders;
+        Itemno:Integer;
+        Plant:String;
+        MatCode:String;
+        MatText:String;
+        UoM:String;
+        ReqQty:Integer;
+        IssQty:Integer;
+        PrjCode:String;
+        SeqCode:String; // WBS no
 }
 
