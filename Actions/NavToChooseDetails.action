@@ -1,0 +1,7 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "NavToChooseDetails"
+	},
+	"PageToOpen": "/SubConApp/Pages/ChooseDetails.page"
+}

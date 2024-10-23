@@ -1,0 +1,23 @@
+{
+	"_Type": "Action.Type.RestService.SendRequest",
+	"ActionResult": {
+		"_Name": "addMaterialToCart"
+	},
+	"OnFailure": "/SubConApp/Actions/RequisitionErrorMsg.action",
+	"OnSuccess": "/SubConApp/Actions/CloseModalPage_Complete.action",
+	"Target": {
+		"Service": "/SubConApp/Services/SubCon.service",
+		"Path": "/requestMaterial",
+		"RequestProperties": {
+			"Method": "POST",
+			"Body": {
+				"materialCode": "#Page:MaterialRequisitionForm/#Control:FCCode/#Value",
+				"wbsNo": "#Page:MaterialRequisitionForm/#Control:FCWBSNo/#SelectedValue",
+				"quantity": "#Page:MaterialRequisitionForm/#Control:FCQuantity/#Value",
+				"requirementDate": "#Page:MaterialRequisitionForm/#Control:FCReqDate/#Value",
+				"loggedInUserId": "#Application/#AppData/UserId"
+			},
+			"FetchCSRF": true
+		}
+	}
+}

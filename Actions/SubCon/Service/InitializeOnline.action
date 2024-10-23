@@ -1,0 +1,10 @@
+{
+	"_Type": "Action.Type.ODataService.Initialize",
+	"ActionResult": {
+		"_Name": "init"
+	},
+	"OnFailure": "/SubConApp/Actions/SubCon/Service/InitializeOnlineFailureMessage.action",
+	"OnSuccess": "/SubConApp/Rules/filterCustomer.js",
+	"ShowActivityIndicator": true,
+	"Service": "/SubConApp/Services/SubCon.service"
+}

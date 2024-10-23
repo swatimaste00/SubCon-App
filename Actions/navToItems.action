@@ -1,0 +1,7 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "navToItems"
+	},
+	"PageToOpen": "/SubConApp/Pages/cartItems.page"
+}

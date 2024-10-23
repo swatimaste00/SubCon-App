@@ -1,0 +1,24 @@
+{
+	"_Type": "Action.Type.RestService.SendRequest",
+	"ActionResult": {
+		"_Name": "setSubconDetails"
+	},
+	"OnSuccess": "/SubConApp/Actions/CloseModalPage_Complete.action",
+	"Target": {
+		"Service": "/SubConApp/Services/SubCon.service",
+		"Path": "/setplantProjectDeptDetails",
+		"RequestProperties": {
+			"Method": "POST",
+			"Body": {
+				"customerID": "#Page:SubCon/#Control:FCCustID/#Value",
+				"customerName": "#Page:SubCon/#Control:FCCustName/#Value",
+				"plant": "#Page:ChooseDetails/#Control:FCSetPlant/#SelectedValue",
+				"projectCode": "#Page:ChooseDetails/#Control:FCSetProject/#SelectedValue",
+				"department": "#Page:ChooseDetails/#Control:FCDept/#SelectedValue",
+				"vkOrg": "#Page:SubCon/#Control:FCvkOrg/#Value",
+				"loggedInUserId": "#Application/#AppData/UserId"
+			},
+			"FetchCSRF": true
+		}
+	}
+}

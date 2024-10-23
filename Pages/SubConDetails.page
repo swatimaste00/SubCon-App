@@ -1,0 +1,174 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"Target": "/SubConApp/Rules/GetCustomer.js",
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Controls": [
+						{
+							"Value": "{partner}",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"DataSubscriptions": [
+								"Z_SUBC_CUST_C"
+							],
+							"_Name": "FCCustID",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Customer ID",
+							"PlaceHolder": "{partner}",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"Value": "{name}",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "FCCustName",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Name",
+							"PlaceHolder": "{name}",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"Value": "{vkorg}",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "FCvkOrg",
+							"IsVisible": false,
+							"Separator": true,
+							"Caption": "SalesOrg",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": false,
+							"IsEditable": false
+						}
+					],
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell0"
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Layout": {
+						"LayoutType": "Vertical",
+						"HorizontalAlignment": "Leading"
+					},
+					"_Type": "Section.Type.ButtonTable",
+					"_Name": "SectionButtonTable0",
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"Buttons": [
+						{
+							"_Type": "ButtonTable.Type.Button",
+							"_Name": "ButtonTableTypeButton1",
+							"Title": "Add Details",
+							"Alignment": "Center",
+							"ButtonType": "Text",
+							"Semantic": "Tint",
+							"Image": "sap-icon://add",
+							"ImagePosition": "Leading",
+							"FullWidth": false,
+							"Visible": true,
+							"Enabled": true,
+							"OnPress": "/SubConApp/Actions/NavToChooseDetails.action"
+						}
+					]
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Layout": {
+						"LayoutType": "Vertical",
+						"HorizontalAlignment": "Leading"
+					},
+					"_Type": "Section.Type.ButtonTable",
+					"_Name": "SectionButtonTable1",
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"Buttons": [
+						{
+							"_Type": "ButtonTable.Type.Button",
+							"_Name": "SectionButton0",
+							"Title": "Browse Materials",
+							"Alignment": "Center",
+							"ButtonType": "Text",
+							"Semantic": "Tint",
+							"Image": "sap-icon://search",
+							"ImagePosition": "Leading",
+							"FullWidth": false,
+							"Visible": true,
+							"Enabled": true,
+							"OnPress": "/SubConApp/Actions/NavToMaterialPage.action"
+						},
+						{
+							"_Type": "ButtonTable.Type.Button",
+							"_Name": "ButtonTableTypeButton0",
+							"Title": "Previous Orders",
+							"Alignment": "Center",
+							"ButtonType": "Text",
+							"Semantic": "Tint",
+							"Image": "sap-icon://my-sales-order",
+							"ImagePosition": "Leading",
+							"FullWidth": false,
+							"Visible": true,
+							"Enabled": true,
+							"OnPress": "/SubConApp/Actions/toPrevOrders.action"
+						}
+					]
+				}
+			]
+		}
+	],
+	"DesignTimeTarget": {
+		"Service": "/SubConApp/Services/SubCon.service",
+		"EntitySet": "Z_SUBC_CUST_C"
+	},
+	"_Type": "Page",
+	"_Name": "SubCon",
+	"Caption": "SubContractor Details",
+	"PrefersLargeCaption": true,
+	"ActionBar": {
+		"Items": [
+			{
+				"_Name": "ActionBarItem0",
+				"Caption": "Item",
+				"Icon": "sap-icon://cart",
+				"Position": "Right",
+				"IsIconCircular": false,
+				"Visible": true,
+				"OnPress": "/SubConApp/Actions/table.action"
+			}
+		],
+		"_Name": "ActionBar1"
+	}
+}

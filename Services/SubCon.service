@@ -1,0 +1,6 @@
+{
+	"DestinationName": "SubConService",
+	"OfflineEnabled": false,
+	"SourceType": "Mobile",
+	"RestService": true
+}

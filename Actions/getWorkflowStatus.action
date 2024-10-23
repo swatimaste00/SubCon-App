@@ -1,0 +1,14 @@
+{
+	"_Type": "Action.Type.RestService.SendRequest",
+	"ActionResult": {
+		"_Name": "getWorkflowStatus"
+	},
+	"Target": {
+		"Service": "/SubConApp/Services/SubCon.service",
+		"Path": "/getWorkflowStatus",
+		"RequestProperties": {
+			"Method": "POST",
+			"FetchCSRF": true
+		}
+	}
+}

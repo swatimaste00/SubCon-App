@@ -1,0 +1,8 @@
+{
+	"_Type": "Action.Type.BannerMessage",
+	"ActionResult": {
+		"_Name": "OrderErrorMsg"
+	},
+	"Message": "#ActionResults:placeOrder/error",
+	"Semantic": "Negative"
+}

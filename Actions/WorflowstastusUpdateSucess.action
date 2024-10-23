@@ -1,0 +1,9 @@
+{
+	"_Type": "Action.Type.BannerMessage",
+	"ActionResult": {
+		"_Name": "WorflowstastusUpdateSucess"
+	},
+	"Message": "Fetched Latest Approval Status !",
+	"Duration": 15,
+	"Semantic": "Positive"
+}

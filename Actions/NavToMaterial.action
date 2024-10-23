@@ -1,0 +1,7 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "NavToMaterial"
+	},
+	"PageToOpen": "/SubConApp/Pages/Material.page"
+}

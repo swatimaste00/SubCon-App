@@ -1,0 +1,19 @@
+{
+	"_Type": "Action.Type.RestService.SendRequest",
+	"ActionResult": {
+		"_Name": "getSubcontractorDetails"
+	},
+	"OnFailure": "/SubConApp/Actions/subconDetailsFailed.action",
+	"OnSuccess": "/SubConApp/Actions/NavToSubCon.action",
+	"Target": {
+		"Service": "/SubConApp/Services/SubCon.service",
+		"Path": "/getSubContractorDetails",
+		"RequestProperties": {
+			"Method": "POST",
+			"Body": {
+				"email": "#Application/#AppData/UserId"
+			},
+			"FetchCSRF": true
+		}
+	}
+}

@@ -1,0 +1,10 @@
+{
+	"_Type": "Action.Type.BannerMessage",
+	"ActionResult": {
+		"_Name": "RequisitionErrorMsg"
+	},
+	"Message": "#ActionResults:addMaterialToCart/error",
+	"Animated": true,
+	"Semantic": "Negative",
+	"Duration":15
+}

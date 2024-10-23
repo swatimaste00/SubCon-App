@@ -1,0 +1,9 @@
+{
+	"_Type": "Action.Type.BannerMessage",
+	"ActionResult": {
+		"_Name": "subconDetailsFailed"
+	},
+	"Message": "#ActionResults:getSubcontractorDetails/error",
+	"Duration": 15,
+	"Semantic": "Negative"
+}

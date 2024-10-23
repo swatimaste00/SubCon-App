@@ -1,0 +1,116 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": true,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"Sections": {
+				"Header": {
+					"DataTable": {
+						"Items": [
+							{
+								"Text": "Project Code",
+								"NumberOfLines": 1
+							},
+							{
+								"Text": "Quantity",
+								"NumberOfLines": 1
+							},
+							{
+								"Text": "Material Code",
+								"NumberOfLines": 1
+							},
+							{
+								"Text": "MR number",
+								"NumberOfLines": 1
+							}
+						],
+						"Layout": {
+							"ColumnWidth": []
+						}
+					},
+					"_Name": "SectionDataTableHeader1",
+					"AccessoryType": "None",
+					"UseTopPadding": true
+				},
+				"Separators": {
+					"TopSectionSeparator": false,
+					"BottomSectionSeparator": true,
+					"HeaderSeparator": true,
+					"FooterSeparator": true,
+					"ControlSeparator": true
+				},
+				"Row": {
+					"Items": [
+						{
+							"Value": "p001",
+							"DisplayType": "Text",
+							"EditType": "Text",
+							"NumberOfLines": 1,
+							"TextAlignment": "Left",
+							"ListPicker": {
+								"PickerItems": [],
+								"Value": "{projectCode}"
+							}
+						},
+						{
+							"Value": "{quantity}",
+							"DisplayType": "Text",
+							"EditType": "Text",
+							"NumberOfLines": 1,
+							"TextAlignment": "Left",
+							"ListPicker": {
+								"PickerItems": []
+							}
+						},
+						{
+							"Value": "{materialCode}",
+							"DisplayType": "Text",
+							"EditType": "Text",
+							"NumberOfLines": 1,
+							"TextAlignment": "Left",
+							"ListPicker": {
+								"PickerItems": []
+							}
+						},
+						{
+							"Value": "{ID}",
+							"DisplayType": "Text",
+							"EditType": "Text",
+							"NumberOfLines": 1,
+							"TextAlignment": "Left",
+							"ListPicker": {
+								"PickerItems": []
+							}
+						}
+					],
+					"Layout": {
+						"ColumnWidth": [100,100,100,100]
+					}
+				},
+				"_Type": "Section.Type.DataTable",
+				"Target": {
+					"Service": "/SubConApp/Services/SubCon.service",
+					"EntitySet": "MaterialRequisitions"
+				},
+				"_Name": "SectionDataTable0",
+				"Visible": true,
+				"EmptySection": {
+					"FooterVisible": false
+				},
+				"EditMode": "Inline",
+				"DataPaging": {
+					"ShowLoadingIndicator": false,
+					"PageSize": 50
+				}
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"_Name": "SectionedTable0"
+		}
+	],
+	"_Type": "Page",
+	"_Name": "CartPage",
+	"Caption": "CartPage",
+	"PrefersLargeCaption": true
+}

@@ -1,0 +1,7 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "NavToSubCon"
+	},
+	"PageToOpen": "/SubConApp/Pages/SubConDetails.page"
+}

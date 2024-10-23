@@ -1,0 +1,17 @@
+{
+	"_Type": "Action.Type.RestService.SendRequest",
+	"ActionResult": {
+		"_Name": "clearCart"
+	},
+	"OnFailure": "/SubConApp/Actions/GenericToastMessage.action",
+	"Target": {
+		"Service": "/SubConApp/Services/SubCon.service",
+		"Path": "/clearCart",
+		"RequestProperties": {
+			"Method": "POST",
+			"Body": {
+			},
+			"FetchCSRF": true
+		}
+	}
+}

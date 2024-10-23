@@ -1,0 +1,35 @@
+{
+	"Controls": [
+		{
+			"_Type": "Control.Type.SectionedTable",
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"_Type": "Section.Type.ObjectHeader",
+					"_Name": "SectionObjectHeader0",
+					"ObjectHeader": {
+						"Subhead": "Subhead",
+						"Description": "Order Id: {orderID_ID}",
+						"StatusText": "Status",
+						"SubstatusText": "Substatus",
+						"DetailImage": "res://mdk_logo.png",
+						"DetailImageIsCircular": false,
+						"HeadlineText": "Headline",
+						"StatusPosition": "Stacked",
+						"StatusImagePosition": "Leading",
+						"SubstatusImagePosition": "Leading"
+					},
+					"Visible": true
+				}
+			],
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			}
+		}
+	],
+	"_Type": "Page",
+	"_Name": "Items",
+	"Caption": "Items",
+	"PrefersLargeCaption": true
+}

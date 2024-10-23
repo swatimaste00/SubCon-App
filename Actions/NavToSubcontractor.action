@@ -1,0 +1,7 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "NavToSubcontractor"
+	},
+	"PageToOpen": "/SubConApp/Pages/subcontractor.page"
+}

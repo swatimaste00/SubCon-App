@@ -1,0 +1,67 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"Target": {
+				"Service": "/SubConApp/Services/SubCon.service",
+				"EntitySet": "SubContractorDetails"
+			},
+			"_Name": "SectionedTable0",
+			"Section": {
+				"Separators": {
+					"TopSectionSeparator": false,
+					"BottomSectionSeparator": true,
+					"HeaderSeparator": true,
+					"FooterSeparator": true,
+					"ControlSeparator": true
+				},
+				"KeyAndValues": [
+					{
+						"Value": "{customerID}",
+						"_Name": "KeyValue0",
+						"KeyName": "customerID",
+						"Visible": true
+					},
+					{
+						"Value": "{customerName}",
+						"_Name": "KeyValue1",
+						"KeyName": "Name",
+						"Visible": true
+					}
+				],
+				"MaxItemCount": 1,
+				"_Type": "Section.Type.KeyValue",
+				"_Name": "SectionKeyValue0",
+				"Visible": true,
+				"EmptySection": {
+					"FooterVisible": false
+				},
+				"Layout": {
+					"NumberOfColumns": 2
+				}
+			}
+		}
+	],
+	"_Type": "Page",
+	"_Name": "test",
+	"Caption": "Subcontractor Details",
+	"PrefersLargeCaption": true,
+	"ActionBar": {
+		"Items": [
+			{
+				"_Name": "ActionBarItem0",
+				"Caption": "Close",
+				"SystemItem": "Cancel",
+				"Position": "Right",
+				"IsIconCircular": false,
+				"Visible": true,
+				"OnPress": "/SubConApp/Actions/ClosePage.action"
+			}
+		],
+		"_Name": "ActionBar1"
+	}
+}

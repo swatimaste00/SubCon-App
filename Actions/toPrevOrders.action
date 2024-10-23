@@ -1,0 +1,7 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "toPrevOrders"
+	},
+	"PageToOpen": "/SubConApp/Pages/PreviousOrderDetails.page"
+}

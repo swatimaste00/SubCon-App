@@ -1,0 +1,91 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"Target": {
+				"Service": "/SubConApp/Services/SubCon.service",
+				"EntitySet": "MaterialRequisitions"
+			},
+			"_Name": "SectionedTable0",
+			"Section": {
+				"_Type": "Section.Type.DataTable",
+				"Target": {
+					"Service": "/SubConApp/Services/SubCon.service",
+					"EntitySet": "MaterialRequisitions"
+				},
+				"_Name": "SectionDataTable0",
+				"Header": {
+					"_Name": "SectionDataTableHeader1",
+					"AccessoryType": "None",
+					"UseTopPadding": true,
+					"DataTable": {
+						"Items": [
+							{
+								"Text": "MR NO",
+								"NumberOfLines": 1
+							},
+							{
+								"Text": "Material Code",
+								"NumberOfLines": 1
+							}
+						],
+						"Layout": {
+							"ColumnWidth": []
+						}
+					}
+				},
+				"Visible": true,
+				"EmptySection": {
+					"FooterVisible": false
+				},
+				"Separators": {
+					"TopSectionSeparator": false,
+					"BottomSectionSeparator": true,
+					"HeaderSeparator": true,
+					"FooterSeparator": true,
+					"ControlSeparator": true
+				},
+				"EditMode": "None",
+				"Row": {
+					"Items": [
+						{
+							"Value": "{ID}",
+							"DisplayType": "Text",
+							"EditType": "Text",
+							"NumberOfLines": 1,
+							"TextAlignment": "Left",
+							"ListPicker": {
+								"PickerItems": []
+							}
+						},
+						{
+							"Value": "{materialCode}",
+							"DisplayType": "Text",
+							"EditType": "Text",
+							"NumberOfLines": 1,
+							"TextAlignment": "Left",
+							"ListPicker": {
+								"PickerItems": []
+							}
+						}
+					],
+					"Layout": {
+						"ColumnWidth": []
+					}
+				},
+				"DataPaging": {
+					"ShowLoadingIndicator": false,
+					"PageSize": 50
+				}
+			}
+		}
+	],
+	"_Type": "Page",
+	"_Name": "cartItems",
+	"Caption": "cartItems",
+	"PrefersLargeCaption": true
+}

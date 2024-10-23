@@ -1,0 +1,63 @@
+{
+	"Credential": "cf",
+	"Template": {
+		"Id": "@ext-mdkvsc-npm-dev/generator-mdk",
+		"Name": "Base",
+		"Version": "0.0.1"
+	},
+	"CF": {
+		"Target": "https://api.cf.jp10.hana.ondemand.com",
+		"Organization": "985928bc-0199-4d3c-8230-ad01bd5d54a3",
+		"Space": "132a1ad2-b039-4eed-a047-2f2f86abd258",
+		"Deploy": {
+			"Destination": [
+				{
+					"CF": "SubConService",
+					"MDK": "SubConService",
+					"URL": ""
+				}
+			],
+			"Name": "ns.SubConApp",
+			"Version": "1.0.0",
+			"AppRouter": "standalone",
+			"WebClient": {
+				"Runtime": "production",
+				"URL": "https://mdk-webclient-runtime.cfapps.jp10.hana.ondemand.com/runtime/"
+			},
+			"Auth": true,
+			"URL": "https://kuok--singapore--limited-devtyo-tlgm9pd3-devtyo-nssubco593a9d81.cfapps.jp10.hana.ondemand.com/nsSubConApp"
+		}
+	},
+	"MobileService": {
+		"Type": "standard",
+		"AdminAPI": "https://mobile-service-cockpit-api.cfapps.jp10.hana.ondemand.com/cockpit/v1/org/985928bc-0199-4d3c-8230-ad01bd5d54a3/space/132a1ad2-b039-4eed-a047-2f2f86abd258",
+		"AppId": "SubContractor.app",
+		"Destination": [
+			"SubConService",
+			"SubContractor.app",
+			"plant",
+			"test",
+			"plant-test",
+			"app-router",
+			"TestingPlantAPI"
+		]
+	},
+	"Onboarding": {
+		"Schema": "sapmobilesvcs",
+		"TimeZone": "UTC",
+		"URL": "sapmobilesvcs://?AppId=SubContractor.app&ClientId=6bbcd595-13d2-4942-89b0-6ca616db1844&ServerUrl=https://devtyo-tlgm9pd3-devtyo-subcontractor-app.cfapps.jp10.hana.ondemand.com&SapCloudPlatformEndpoint=https://devtyo-tlgm9pd3-devtyo-subcontractor-app.cfapps.jp10.hana.ondemand.com&AuthorizationEndpointUrl=https://devtyo-tlgm9pd3-devtyo-subcontractor-app.cfapps.jp10.hana.ondemand.com/oauth2/api/v1/authorize&RedirectUrl=https://devtyo-tlgm9pd3-devtyo-subcontractor-app.cfapps.jp10.hana.ondemand.com&TokenUrl=https://devtyo-tlgm9pd3-devtyo-subcontractor-app.cfapps.jp10.hana.ondemand.com/oauth2/api/v1/token&multiUser=false"
+	},
+	"LCAP": {
+		"FullName": "",
+		"Service": [],
+		"sourceTemplate": {
+			"id": "html5moduletemplates.basicSAPUI5ApplicationProjectModule",
+			"version": "1.40.12"
+		}
+	},
+	"Build": {
+		"SourceMap": true,
+		"TSTarget": "es6",
+		"WMF": true
+	}
+}

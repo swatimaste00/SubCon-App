@@ -1,0 +1,78 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"_Type": "Section.Type.ContactCell",
+					"Target": {
+						"Service": "/SubConApp/Services/SubCon.service",
+						"EntitySet": "Z_SUBC_MATNR_C"
+					},
+					"_Name": "SectionContactCell1",
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"ContactCell": {
+						"Visible": true,
+						"ContextMenu": {
+							"PerformFirstActionWithFullSwipe": true
+						},
+						"DetailImage": "sap-icon://product",
+						"Headline": "{maktx}",
+						"Subheadline": "{matnr}",
+						"Description": "{matkl}",
+						"OnPress": "/SubConApp/Actions/NavToDetailPage.action"
+					},
+					"DataPaging": {
+						"ShowLoadingIndicator": false,
+						"PageSize": 50
+					},
+					"Search": {
+						"Enabled": true
+					}
+				}
+			]
+		}
+	],
+	"_Type": "Page",
+	"_Name": "Material",
+	"Caption": "Materials",
+	"PrefersLargeCaption": true,
+	"ActionBar": {
+		"Items": [
+			{
+				"_Name": "ActionBarItem1",
+				"Caption": "Home",
+				"Icon": "sap-icon://home",
+				"Position": "Left",
+				"IsIconCircular": false,
+				"Visible": true,
+				"OnPress": "/SubConApp/Actions/NavToHome.action"
+			},
+			{
+				"_Name": "ActionBarItem0",
+				"Caption": "Item",
+				"Icon": "sap-icon://cart",
+				"Position": "Right",
+				"IsIconCircular": false,
+				"Visible": true,
+				"OnPress": "/SubConApp/Actions/table.action"
+			}
+		],
+		"_Name": "ActionBar1"
+	}
+}

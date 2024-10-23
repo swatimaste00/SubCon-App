@@ -1,0 +1,254 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"Header": {
+						"DataTable": {
+							"Items": [
+								{
+									"Text": "MR No",
+									"NumberOfLines": 1
+								},
+								{
+									"Text": "Material Group",
+									"NumberOfLines": 1
+								},
+								{
+									"Text": "Material Code",
+									"NumberOfLines": 1
+								},
+								{
+									"Text": "Name",
+									"NumberOfLines": 1
+								},
+								{
+									"Text": "Quantity",
+									"NumberOfLines": 1
+								},
+								{
+									"Text": "UoM",
+									"NumberOfLines": 1
+								},
+								{
+									"Text": "WBS No",
+									"NumberOfLines": 1
+								}
+							],
+							"Layout": {
+								"ColumnWidth": []
+							}
+						},
+						"_Name": "SectionDataTableHeader0",
+						"AccessoryType": "None",
+						"UseTopPadding": true
+					},
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Row": {
+						"Items": [
+							{
+								"Value": "{ID}",
+								"DisplayType": "Text",
+								"EditType": "Text",
+								"NumberOfLines": 1,
+								"TextAlignment": "Left",
+								"ListPicker": {
+									"PickerItems": []
+								}
+							},
+							{
+								"Value": "{materialGroup}",
+								"DisplayType": "Text",
+								"EditType": "Text",
+								"NumberOfLines": 1,
+								"TextAlignment": "Left",
+								"ListPicker": {
+									"PickerItems": []
+								}
+							},
+							{
+								"Value": "{materialCode}",
+								"DisplayType": "Text",
+								"EditType": "Text",
+								"NumberOfLines": 1,
+								"TextAlignment": "Left",
+								"ListPicker": {
+									"PickerItems": []
+								}
+							},
+							{
+								"Value": "{materialName}",
+								"DisplayType": "Text",
+								"EditType": "Text",
+								"NumberOfLines": 1,
+								"TextAlignment": "Left",
+								"ListPicker": {
+									"PickerItems": []
+								}
+							},
+							{
+								"Value": "{quantity}",
+								"DisplayType": "Text",
+								"EditType": "Text",
+								"NumberOfLines": 1,
+								"TextAlignment": "Left",
+								"ListPicker": {
+									"PickerItems": []
+								}
+							},
+							{
+								"Value": "{uom}",
+								"DisplayType": "Text",
+								"EditType": "Text",
+								"NumberOfLines": 1,
+								"TextAlignment": "Left",
+								"ListPicker": {
+									"PickerItems": []
+								}
+							},
+							{
+								"Value": "{wbsNo}",
+								"DisplayType": "Text",
+								"EditType": "Text",
+								"NumberOfLines": 1,
+								"TextAlignment": "Left",
+								"ListPicker": {
+									"PickerItems": []
+								}
+							}
+						],
+						"Layout": {
+							"ColumnWidth": [
+								100,
+								100,
+								100,
+								100,
+								100,
+								100,
+								100,
+								100
+							]
+						}
+					},
+					"_Type": "Section.Type.DataTable",
+					"Target": {
+						"Service": "/SubConApp/Services/SubCon.service",
+						"EntitySet": "MaterialRequisitions"
+					},
+					"_Name": "SectionDataTable0",
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"EditMode": "None",
+					"DataPaging": {
+						"ShowLoadingIndicator": false,
+						"PageSize": 50
+					}
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Layout": {
+						"LayoutType": "Vertical",
+						"HorizontalAlignment": "Leading"
+					},
+					"_Type": "Section.Type.ButtonTable",
+					"_Name": "SectionButtonTable0",
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"Buttons": [
+						{
+							"_Type": "ButtonTable.Type.Button",
+							"_Name": "ButtonTableTypeButton0",
+							"Title": "Place Order",
+							"Alignment": "Center",
+							"ButtonType": "Text",
+							"Semantic": "Tint",
+							"Image": "res://mdk_logo.png",
+							"ImagePosition": "Leading",
+							"FullWidth": false,
+							"Visible": true,
+							"Enabled": true,
+							"OnPress": "/SubConApp/Actions/placeOrder.action"
+						},
+						{
+							"_Type": "ButtonTable.Type.Button",
+							"_Name": "SectionButton0",
+							"Title": "Browse Materials",
+							"Alignment": "Center",
+							"ButtonType": "Text",
+							"Semantic": "Tint",
+							"Image": "sap-icon://search",
+							"ImagePosition": "Leading",
+							"FullWidth": false,
+							"Visible": true,
+							"Enabled": true,
+							"OnPress": "/SubConApp/Actions/NavToMaterialPage.action"
+						},
+						{
+							"_Type": "ButtonTable.Type.Button",
+							"_Name": "ButtonTableTypeButton1",
+							"Title": "Previous Orders",
+							"Alignment": "Center",
+							"ButtonType": "Text",
+							"Semantic": "Tint",
+							"Image": "sap-icon://my-sales-order",
+							"ImagePosition": "Leading",
+							"FullWidth": false,
+							"Visible": true,
+							"Enabled": true,
+							"OnPress": "/SubConApp/Actions/toPrevOrders.action"
+						}
+					]
+				}
+			]
+		}
+	],
+	"_Type": "Page",
+	"_Name": "CartItems",
+	"Caption": "Cart",
+	"PrefersLargeCaption": true,
+	"ActionBar": {
+		"Items": [
+			{
+				"_Name": "ActionBarItem0",
+				"Caption": "Home",
+				"Icon": "sap-icon://home",
+				"Position": "Left",
+				"IsIconCircular": false,
+				"Visible": true,
+				"OnPress": "/SubConApp/Rules/GetCustomer.js"
+			},
+			{
+				"_Name": "Clear Cart",
+				"Caption": "Item",
+				"Icon": "sap-icon://clear-all",
+				"Position": "Right",
+				"IsIconCircular": false,
+				"Visible": true,
+				"OnPress": "/SubConApp/Actions/clearCart.action"
+			}
+		],
+		"_Name": "ActionBar1"
+	}
+}

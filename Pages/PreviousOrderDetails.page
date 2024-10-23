@@ -1,0 +1,141 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"Header": {
+						"DataTable": {
+							"Items": [
+								{
+									"Text": "RequestNo",
+									"NumberOfLines": 1
+								},
+								{
+									"Text": "OrderDate",
+									"NumberOfLines": 1
+								},
+								{
+									"Text": "Approver",
+									"NumberOfLines": 1
+								},
+								{
+									"Text": "Status",
+									"NumberOfLines": 1
+								}
+							],
+							"Layout": {
+								"ColumnWidth": [
+									100,
+									100,
+									100,
+									100
+								]
+							}
+						},
+						"_Name": "SectionDataTableHeader0",
+						"AccessoryType": "None",
+						"UseTopPadding": true
+					},
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Row": {
+						"Items": [
+							{
+								"Value": "{RequestNo}",
+								"DisplayType": "Text",
+								"EditType": "Text",
+								"NumberOfLines": 1,
+								"TextAlignment": "Left",
+								"ListPicker": {
+									"PickerItems": []
+								}
+							},
+							{
+								"Value": "{orderDate}",
+								"DisplayType": "Text",
+								"EditType": "Text",
+								"NumberOfLines": 1,
+								"TextAlignment": "Left",
+								"ListPicker": {
+									"PickerItems": []
+								}
+							},
+							{
+								"Value": "{approverEmailId}",
+								"DisplayType": "Text",
+								"EditType": "Text",
+								"NumberOfLines": 1,
+								"TextAlignment": "Left",
+								"ListPicker": {
+									"PickerItems": []
+								}
+							},
+							{
+								"Value": "{approvalStatus}",
+								"DisplayType": "Text",
+								"EditType": "Text",
+								"NumberOfLines": 1,
+								"TextAlignment": "Left",
+								"ListPicker": {
+									"PickerItems": []
+								}
+							}
+						],
+						"Layout": {
+							"ColumnWidth": [
+								100,
+								100,
+								100,
+								100
+							]
+						}
+					},
+					"_Type": "Section.Type.DataTable",
+					"Target": {
+						"Service": "/SubConApp/Services/SubCon.service",
+						"EntitySet": "Orders"
+					},
+					"_Name": "SectionDataTable0",
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"EditMode": "None",
+					"DataPaging": {
+						"ShowLoadingIndicator": false,
+						"PageSize": 50
+					}
+				}
+			]
+		}
+	],
+	"_Type": "Page",
+	"_Name": "PreviousOrderDetails",
+	"Caption": "PreviousOrderDetails",
+	"PrefersLargeCaption": true,
+	"ActionBar": {
+		"Items": [
+			{
+				"_Name": "ActionBarItem0",
+				"Caption": "Item",
+				"SystemItem": "Refresh",
+				"Position": "Right",
+				"IsIconCircular": false,
+				"Visible": true,
+				"OnPress": "/SubConApp/Actions/getWorkflowStatus.action"
+			}
+		],
+		"_Name": "ActionBar1"
+	}
+}

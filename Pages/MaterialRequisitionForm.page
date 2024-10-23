@@ -1,0 +1,178 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"Target": {
+				"Service": "/SubConApp/Services/SubCon.service",
+				"EntitySet": "Z_SUBC_MATNR_C"
+			},
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"ObjectHeader": {
+						"DetailImage": "sap-icon://product",
+						"DetailImageIsCircular": false,
+						"HeadlineText": "{maktx}",
+						"StatusPosition": "Stacked",
+						"StatusImagePosition": "Leading",
+						"SubstatusImagePosition": "Leading"
+					},
+					"_Type": "Section.Type.ObjectHeader",
+					"_Name": "SectionObjectHeader0",
+					"Visible": true
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"KeyAndValues": [
+						{
+							"Value": "{matnr}",
+							"_Name": "KeyValue1",
+							"KeyName": "Material Group",
+							"Visible": true
+						},
+						{
+							"Value": "{meins}",
+							"_Name": "KeyValue2",
+							"KeyName": "UoM",
+							"Visible": true
+						}
+					],
+					"MaxItemCount": 1,
+					"_Type": "Section.Type.KeyValue",
+					"_Name": "SectionKeyValue0",
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"Layout": {
+						"NumberOfColumns": 2
+					}
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Controls": [
+						{
+							"Value": "{matnr}",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "FCCode",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Material Number",
+							"PlaceHolder": "{matnr}",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "FCQuantity",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Quantity",
+							"PlaceHolder": "Enter quantity",
+							"KeyboardType": "Number",
+							"Enabled": true,
+							"IsEditable": true
+						},
+						{
+							"Value": "Enter Date",
+							"_Type": "Control.Type.FormCell.DatePicker",
+							"_Name": "FCReqDate",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Requirement Date",
+							"HelperText": "Please enter the requirement date",
+							"IsEditable": true,
+							"Mode": "Datetime"
+						},
+						{
+							"_Type": "Control.Type.FormCell.ListPicker",
+							"_Name": "FCWBSNo",
+							"IsVisible": true,
+							"Separator": true,
+							"AllowMultipleSelection": true,
+							"AllowEmptySelection": true,
+							"Caption": "WBS No",
+							"DataPaging": {
+								"ShowLoadingIndicator": false,
+								"PageSize": 50
+							},
+							"PickerPrompt": "Please select one single item",
+							"IsSelectedSectionEnabled": false,
+							"IsPickerDismissedOnSelection": false,
+							"IsSearchCancelledAfterSelection": false,
+							"AllowDefaultValueIfOneItem": false,
+							"IsEditable": true,
+							"Search": {
+								"Enabled": true
+							},
+							"PickerItems": {
+								"Target": {
+									"Service": "/SubConApp/Services/SubCon.service",
+									"EntitySet": "Z_SUBC_wbs_C",
+									"QueryOptions": "$filter=pspid eq '{{#Page:ChooseDetails/#Control:FCSetProject/#SelectedValue}}'"
+								},
+								"ObjectCell": {
+									"PreserveIconStackSpacing": true,
+									"Selected": true,
+									"Title": "{posid} {post1_wbs}",
+									"Visible": true
+								},
+								"ReturnValue": "{posid}"
+							}
+						}
+					],
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell0"
+				}
+			]
+		}
+	],
+	"_Type": "Page",
+	"_Name": "MaterialRequisitionForm",
+	"Caption": "MaterialRequisitionForm",
+	"PrefersLargeCaption": true,
+	"ActionBar": {
+		"Items": [
+			{
+				"_Name": "ActionBarItem1",
+				"Caption": "Cancel",
+				"Icon": "sap-icon://cancel",
+				"Position": "Left",
+				"IsIconCircular": false,
+				"Visible": true,
+				"OnPress": "/SubConApp/Actions/CloseModalPage_Cancel.action"
+			},
+			{
+				"_Name": "ActionBarItem0",
+				"Caption": "Save",
+				"SystemItem": "Save",
+				"Icon": "sap-icon://save",
+				"Position": "Right",
+				"IsIconCircular": false,
+				"Visible": true,
+				"OnPress": "/SubConApp/Actions/addMaterialToCart.action"
+			}
+		],
+		"_Name": "ActionBar1"
+	}
+}

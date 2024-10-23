@@ -1,0 +1,8 @@
+{
+	"_Type": "Action.Type.BannerMessage",
+	"ActionResult": {
+		"_Name": "OrderPlaced"
+	},
+	"Message": "Order Placed",
+	"Semantic": "Positive"
+}

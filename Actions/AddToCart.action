@@ -1,0 +1,25 @@
+{
+	"_Type": "Action.Type.RestService.SendRequest",
+	"ActionResult": {
+		"_Name": "AddToCart"
+	},
+	"OnFailure": "/SubConApp/Actions/GenericToastMessage.action",
+	"OnSuccessLog": {
+		"Message": " Successfully added to cart #Page:MaterialDetails/#Control:FCCode/#Value",
+		"Level": "Off"
+	},
+	"OnFailureLog": {
+		"Message": "failed",
+		"Level": "Off"
+	},
+	"Target": {
+		"Service": "/SubConApp/Services/SubCon.service",
+		"Path": "/addToCart",
+		"RequestProperties": {
+			"Method": "POST",
+			"Body": {
+				"materialCode": "#Page:MaterialDetails/#Control:FCCode/#Value"
+			}
+		}
+	}
+}

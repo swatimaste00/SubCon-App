@@ -1,0 +1,18 @@
+{
+	"_Type": "Action.Type.RestService.SendRequest",
+	"ActionResult": {
+		"_Name": "placeOrder"
+	},
+	"OnFailure": "/SubConApp/Actions/GenericBannerMessage.action",
+	"OnSuccess": "/SubConApp/Actions/OrderPlaced.action",
+	"Target": {
+		"Service": "/SubConApp/Services/SubCon.service",
+		"Path": "/placeOrder",
+		"RequestProperties": {
+			"Method": "POST",
+			"Body": {
+			},
+			"FetchCSRF": true
+		}
+	}
+}

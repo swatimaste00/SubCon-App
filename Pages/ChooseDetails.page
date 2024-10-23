@@ -1,0 +1,169 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Controls": [
+						{
+							"Value": [
+								"{werks}"
+							],
+							"_Type": "Control.Type.FormCell.ListPicker",
+							"_Name": "FCSetPlant",
+							"IsVisible": true,
+							"Separator": true,
+							"AllowMultipleSelection": false,
+							"AllowEmptySelection": false,
+							"Caption": "Plant",
+							"DataPaging": {
+								"ShowLoadingIndicator": true,
+								"PageSize": 50
+							},
+							"PickerPrompt": "Please select one single item",
+							"OnValueChange": "/SubConApp/Rules/FilterDeptByPlant.js",
+							"IsSelectedSectionEnabled": true,
+							"AllowDefaultValueIfOneItem": true,
+							"IsEditable": true,
+							"Search": {
+								"Enabled": true
+							},
+							"PickerItems": {
+								"Target": {
+									"Service": "/SubConApp/Services/SubCon.service",
+									"EntitySet": "Z_SUBC_PLANT_C"
+								},
+								"ObjectCell": {
+									"PreserveIconStackSpacing": true,
+									"Selected": true,
+									"Title": "{name1} {werks}",
+									"Visible": true
+								},
+								"ReturnValue": "{werks}"
+							}
+						},
+						{
+							"Value": [
+								"{pspid}"
+							],
+							"_Type": "Control.Type.FormCell.ListPicker",
+							"_Name": "FCSetProject",
+							"IsVisible": true,
+							"Separator": true,
+							"AllowMultipleSelection": false,
+							"AllowEmptySelection": false,
+							"Caption": "Project Code",
+							"DataPaging": {
+								"ShowLoadingIndicator": true,
+								"PageSize": 50
+							},
+							"PickerPrompt": "Please select one single item",
+							"IsSelectedSectionEnabled": true,
+							"AllowDefaultValueIfOneItem": true,
+							"IsEditable": true,
+							"Search": {
+								"Enabled": true
+							},
+							"PickerItems": {
+								"Target": {
+									"Service": "/SubConApp/Services/SubCon.service",
+									"EntitySet": "Z_SUBC_PROJ_C"
+								},
+								"ObjectCell": {
+									"PreserveIconStackSpacing": true,
+									"Selected": true,
+									"Title": "{post1} {pspid}",
+									"Visible": true
+								},
+								"ReturnValue": "{pspid}"
+							}
+						},
+						{
+							"Value": [
+								"{kostl}"
+							],
+							"_Type": "Control.Type.FormCell.ListPicker",
+							"_Name": "FCDept",
+							"IsVisible": true,
+							"Separator": true,
+							"AllowMultipleSelection": false,
+							"AllowEmptySelection": true,
+							"Caption": "Department",
+							"DataPaging": {
+								"ShowLoadingIndicator": false,
+								"PageSize": 50
+							},
+							"PickerPrompt": "Please select one single item",
+							"IsSelectedSectionEnabled": true,
+							"AllowDefaultValueIfOneItem": true,
+							"IsEditable": true,
+							"FilterProperty": "{plant_code}",
+							"Search": {
+								"Enabled": true
+							},
+							"PickerItems": {
+								"Target": {
+									"Service": "/SubConApp/Services/SubCon.service",
+									"EntitySet": "Z_SUBC_DEPT_C",
+									"QueryOptions": "$filter=werks eq '{{#Control:FCSetPlant/#SelectedValue}}'"
+								},
+								"ObjectCell": {
+									"PreserveIconStackSpacing": true,
+									"Selected": true,
+									"Title": "{kostl} {KTEXT}",
+									"Visible": true
+								},
+								"ReturnValue": "{kostl}"
+							}
+						}
+					],
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell0"
+				}
+			]
+		}
+	],
+	"_Type": "Page",
+	"_Name": "ChooseDetails",
+	"Caption": "Choose Details",
+	"PrefersLargeCaption": true,
+	"ActionBar": {
+		"Items": [
+			{
+				"_Name": "ActionBarItem1",
+				"Caption": "Item",
+				"SystemItem": "Cancel",
+				"Position": "Left",
+				"IsIconCircular": false,
+				"Visible": true,
+				"OnPress": "/SubConApp/Actions/CloseModalPage_Complete.action"
+			},
+			{
+				"_Name": "ActionBarItem0",
+				"Caption": "Item",
+				"SystemItem": "Save",
+				"Position": "Right",
+				"IsIconCircular": false,
+				"Visible": true,
+				"OnPress": "/SubConApp/Actions/setSubconDetails.action"
+			}
+		],
+		"_Name": "ActionBar1"
+	}
+}
