@@ -11,7 +11,7 @@ entity SubContractorDetails{
     customerID:String;
     customerName:String;
     Salesorg:String;
-    date:Date;
+    date:DateTime;
     plant:String;
     project:String;
     department:String;
@@ -68,7 +68,7 @@ entity UoMs {
 }
 
 entity MaterialRequisitions {
-    key ID                   : Integer64;
+    key ID                   : String;
         wbsNo                : String(255);
         materialCode         : String(255);
         materialGroup:String;
@@ -93,7 +93,7 @@ entity MRApprovals : cuid, managed {
 }
 
 entity Orders {
-    key RequestNo                   : Integer64;
+    key RequestNo                   : String;
         ImReqDate:String;
         orderDate            : DateTime;
         DistrChan:String;
@@ -103,6 +103,9 @@ entity Orders {
         workflowApproverNext : User;
         approvalStatus       : String(255);
         rejectionRemarks     : String(256);
+        department:String;
+        approverName:String;
+        approverEmailId:String;
         items : Composition of many OrderItems on items.RequestNo = $self;
         subcontractor:Association to one SubContractorDetails;
 }
@@ -110,14 +113,18 @@ entity Orders {
 entity OrderItems {
     key ID           : UUID;
         RequestNo      : Association to Orders;
-        Itemno:Integer;
+        Itemno:String;
         Plant:String;
         MatCode:String;
         MatText:String;
-        UoM:String;
-        ReqQty:Integer;
-        IssQty:Integer;
+        Uom:String;
+        ReqQty:String;
+        IssQty:String;
         PrjCode:String;
         SeqCode:String; // WBS no
 }
 
+entity OrderStatusResult {
+    RequestNo: String;
+    approvalStatus: String(255);
+}

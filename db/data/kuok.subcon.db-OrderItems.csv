@@ -1,1 +1,1 @@
-ID,RequestNo_RequestNo,Itemno,Plant,MatCode,MatText,UoM,ReqQty,IssQty,PrjCode,SeqCode
+ID,RequestNo_RequestNo,Itemno,Plant,MatCode,MatText,Uom,ReqQty,IssQty,PrjCode,SeqCode

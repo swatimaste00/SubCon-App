@@ -9,12 +9,12 @@ module.exports = async function () {
   const { Materials, MaterialRequisitions ,Orders,OrderItems,Z_SUBC_CUST_C, Z_SUBC_PLANT_C,Z_SUBC_DEPT_C,Z_SUBC_PROJ_C,Z_SUBC_wbs_C,Z_SUBC_MATKL_C,Z_SUBC_MATNR_C,MRApprovals,Plants,Projects,WBSElements, SubContractorDetails,Departments} = cds.entities; // get reflected definitions
 
 
-  this.on("READ", "SubContractorDetails", async (req) => {
-    const email = cds.context.user.id;
-    var subcontractor = await SELECT.one.from(SubContractorDetails).where({ emailId: email });
-    return subcontractor;
+//   this.on("READ", "SubContractorDetails", async (req) => {
+//     const email = cds.context.user.id;
+//     var subcontractor = await SELECT.one.from(SubContractorDetails).where({ emailId: email });
+//     return subcontractor;
 
-});
+// });
 
 
  // destination
@@ -156,11 +156,15 @@ module.exports = async function () {
   //Testing DO
 
   this.on('READ', 'Plants', async (req) => {
-    var payload ={"Salesorg":"DA11","DistrChan":"MI","Division":"00","ShipTo":"0024000051","RequestNo":"4125","Bname":"VASEEM.M","RequestedBy":"VASEEM.M","ImReqDate":"\/Date(1726006830000)\/","ProcessingType":"3","AppIdImp":"","Delivery":"","Items":[{"RequestNo":"4125","Itemno":"1","Plant":"DA11","MatCode":"ABRA-011-01-0003","MatText":"","Uom":"EA","ReqQty":"20","IssQty":"7","PrjCode":"ST04800","SeqCode":"ST04800.T.E00001"},{"RequestNo":"4125","Itemno":"2","Plant":"DA11","MatCode":"ABRA-011-01-0003","MatText":"","Uom":"EA","ReqQty":"20","IssQty":"7","PrjCode":"ST04800","SeqCode":"ST04800.T.E00001"}]};
+    var payload ={"Salesorg":"DA11","DistrChan":"MI","Division":"00","ShipTo":"0024000051","RequestNo":"7125","Bname":"VASEEM.M","RequestedBy":"VASEEM.M","ImReqDate":"\/Date(1726006830000)\/","ProcessingType":"3","AppIdImp":"","Delivery":"","Items":[{"RequestNo":"7125","Itemno":"1","Plant":"DA11","MatCode":"ABRA-011-01-0003","MatText":"","Uom":"EA","ReqQty":"20","IssQty":"7","PrjCode":"ST04800","SeqCode":"ST04800.T.E00001"},{"RequestNo":"7125","Itemno":"2","Plant":"DA11","MatCode":"ABRA-011-01-0003","MatText":"","Uom":"EA","ReqQty":"20","IssQty":"7","PrjCode":"ST04800","SeqCode":"ST04800.T.E00001"}]};
     
     try{
-      const apiS4Srv = await cds.connect.to("ZAPI_001_RFC_SUBCON_POST_SRV");
-    let response = await apiS4Srv.send('/SubconRequestSet',payload);
+      const apiS4Srv = await cds.connect.to("ZAPI_001_RFC_SUBCON_REQ_POST_SRV");
+    let response = await apiS4Srv.send({
+      method: 'POST',
+      data: payload,  // Sending payload as body
+      headers: { 'X-Requested-With': 'X' }
+    });
     console.log("Create DO response", response);
     return response;
 
@@ -212,10 +216,10 @@ module.exports = async function () {
   });
 
   this.on("setplantProjectDeptDetails", async (req) => {
-    const { customerID, customerName,plant, projectCode, department, vkOrg } = req.data;
+    const { customerID, customerName,plant, projectCode, department, vkOrg ,loggedInUserId } = req.data;
 
     // Get the email of the currently logged-in user
-    var { email } = cds.context.user.id;
+    var { email } = loggedInUserId;
     if (!email) {
         email = "swati.maste@sap.com";
     }
@@ -266,7 +270,7 @@ module.exports = async function () {
 
 
   this.on("requestMaterial", async (req) => {
-    const { materialCode, quantity, wbsNo ,requirementDate} = req.data;
+    const { materialCode, quantity, wbsNo ,requirementDate,loggedInUserId} = req.data;
     
 
     const apiS4Srv = await cds.connect.to("Z_SUBC_MATNR_C_CDS");
@@ -302,7 +306,7 @@ module.exports = async function () {
 
 
     const materialRequisition = {
-      ID: ReqNo, // generate a unique ID
+      ID: ReqNo.toString(), // generate a unique ID
       materialCode:req.data.materialCode,
       quantity:requestedQuantity,
       ImReqDate:formattedImReqDate,
@@ -310,7 +314,7 @@ module.exports = async function () {
       requirementDate:requirementDate,
       materialName:materialName,
       wbsNo: wbsNo, // assuming this is the correct foreign key field name
-      submittedBy: cds.context.user.id, // assuming the user submitting the request
+      submittedBy: loggedInUserId, // assuming the user submitting the request
       materialGroup:materialGroup
     };
     
@@ -326,20 +330,22 @@ module.exports = async function () {
 
   this.on("placeOrder", async (req) => {
     const materialRequisitions = await SELECT.from(MaterialRequisitions);
-    const SubContractorInfo = await SELECT.one.from(SubContractorDetails).where({emailId:cds.context.user.id});
+    const SubContractorInfo = await SELECT.one.from(SubContractorDetails).where({emailId:materialRequisitions[0].submittedBy}); // add the where emailId=cds.context.user.id clause later.
+    let itemcount=0;
+    let payloadWithIssuedQty;
 
     if (materialRequisitions.length === 0) {
       return req.error(400, 'No items in the cart to place an order');
     }
 
     const items = materialRequisitions.map(requisition => ({
-      RequestNo: requisition.ID, // this is the Order ID to which the items belong
-      Itemno:itemcount=itemcount+1,
+      RequestNo: requisition.ID.toString(), // this is the Order ID to which the items belong
+      Itemno:(++itemcount).toString(),
       Plant:SubContractorInfo.plant,
       MatCode: requisition.materialCode,
       MatText: requisition.materialName,
-      ReqQty: requisition.quantity, // convert to integer
-      UoM: requisition.uom,
+      ReqQty: requisition.quantity.toString(), // convert to integer
+      Uom: requisition.uom,
       PrjCode:SubContractorInfo.project,
       SeqCode: requisition.wbsNo,
     }));
@@ -351,74 +357,92 @@ module.exports = async function () {
       Division:"00",
       ShipTo:SubContractorInfo.customerID,
       RequestNo:materialRequisitions[0].ID,
-      Bname:cds.context.user.id,
-      RequestedBy:cds.context.user.id,
-      ImReqDate:materialRequisitions[0].requirementDate,
+      Bname:SubContractorInfo.emailId.split('@')[0],
+      RequestedBy:SubContractorInfo.emailId.split('@')[0],
+      ImReqDate:materialRequisitions[0].ImReqDate,
       ProcessingType:"1",
       AppIdImp:"",
       Delivery:"",
       Items:items
     }
 
-    console.log("DO quantity check payload",payload);
 
     try{
-      const apiS4Srv = await cds.connect.to("ZAPI_001_RFC_SUBCON_POST_SRV");
-      let payloadWithIssuedQty = await apiS4Srv.send('/SubconRequestSet',payload);
-      console.log("DO quantity check successful", payloadWithIssuedQty);
+      const apiS4Srv = await cds.connect.to("ZAPI_001_RFC_SUBCON_REQ_POST_SRV"); 
+      payloadWithIssuedQty = await apiS4Srv.send({
+        method: 'POST',
+        path: '/SubconRequestSet',
+        data: payload,  // Sending payload as body
+        headers: { 'X-Requested-With': 'X' }
+      });
+  
+      console.log("DO quantity check successful");
       //return payloadWithIssuedQty;
 
     }catch(error){
       console.log("error DO quantity check",error)
     }
 
-   
-    const order = {
-      RequestNo: materialRequisitions[0].ID,
-      orderDate: new Date(),
-      ImReqDate:payloadWithIssuedQty.ImReqDate,
-      approvalStatus:'PENDING',
-      DistrChan:"MI",
-      Division:"00",
-      department:SubContractorInfo.department,
-      approverName:SubContractorInfo.approverName,
-      approverEmailId:SubContractorInfo.approverEmailId,
-      placedBy:cds.context.user.id // assuming the user placing the order
-    };
-
-    await INSERT.into(Orders).entries(order);
-
-    const orderItems = payloadWithIssuedQty.Items.map((item) => ({
-      ID: cds.utils.uuid(),
-      RequestNo: order.RequestNo,
-      Itemno:item.Itemno, // Same RequestNo for all order items
-      Plant: item.Plant,
-      MatCode: item.MatCode,
-      MatText: item.MatText, // Use API MatText if available
-      ReqQty: item.ReqQty,
-      IssQty: item.IssQty, // Issued Quantity from API response
-      UoM: item.Uom,
-      PrjCode: item.PrjCode,
-      SeqCode: item.SeqCode
-  }));
-
-    await INSERT.into(OrderItems).entries(orderItems);
+    if (payloadWithIssuedQty && payloadWithIssuedQty.Items) {
+      const order = {
+          RequestNo: materialRequisitions[0].ID.toString(),
+          orderDate: new Date(),
+          ImReqDate: materialRequisitions[0].ImReqDate,
+          approvalStatus: 'PENDING',
+          DistrChan: "MI",
+          Division: "00",
+          department:SubContractorInfo.department,
+          approverName: SubContractorInfo.approverName,
+          approverEmailId: SubContractorInfo.approverEmailId,
+          placedBy: SubContractorInfo.emailId // assuming the user placing the order
+      };
+  
+      await INSERT.into(Orders).entries(order);
+      //console.log("Order Placed with ID",order.RequestNo)
+  
+      const orderItems = payloadWithIssuedQty.Items.map((item) => ({
+          ID: cds.utils.uuid(),
+          RequestNo_RequestNo: materialRequisitions[0].ID.toString(),
+          Itemno: item.Itemno.toString(),
+          Plant: item.Plant,
+          MatCode: item.MatCode,
+          MatText: item.MatText,
+          ReqQty: item.ReqQty.toString(),
+          IssQty: item.IssQty.toString(),
+          Uom: item.Uom,
+          PrjCode: item.PrjCode,
+          SeqCode: item.SeqCode
+      }));
+  
+      await INSERT.into(OrderItems).entries(orderItems);
+  } else {
+      console.log("No payloadWithIssuedQty data to process.");
+  }
 
     // Clear the cart after placing the order
     await DELETE.from(MaterialRequisitions);
 
-    console.log(", with orderID", order.RequestNo)
+    console.log("Order Placed",{ RequestNo: materialRequisitions[0].ID.toString()})
+    return { 
+      RequestNo: materialRequisitions[0].ID.toString(),
+      emailId: SubContractorInfo.emailId
+    };
 
   });
 
   this.after("placeOrder", async (orderData, req) => {
-    const orderID = orderData.RequestNo;  // Get the order ID from the previous hook's response
+    console.log("OrderData", orderData);
+    console.log("Req",req.data);
+    const { RequestNo, emailId } = orderData; 
+    // Get the order ID from the previous hook's response
 
+  
     let dataOrderInfo = await SELECT.from(Orders, O => {
       O`.*`,
-      O.items(I => {I`.*`}),
-      O.subcontractor(S => {S`.*`})
-    }).where({RequestNo: orderID});
+      O.items(I => {I`.*`})
+    }).where({RequestNo: RequestNo});
+
+    const SubContractorInfo = await SELECT.one.from(SubContractorDetails).where({emailId:emailId});
 
 
     if (dataOrderInfo[0].items.length < 1) {
@@ -430,35 +454,30 @@ module.exports = async function () {
       return;
     }
 
-    // await UPDATE.entity(Orders, orderID).set({
-    //   approvalStatus: 'PENDING',
-    //   placedBy: cds.context.user.id
-    // });
-
     let workflowContext = {}, sbpaWorkflowResponse, sbpaUserTaskInstances, orderApproval = {}, itemCount=0;
-    workflowContext.salesorg = dataOrderInfo[0].subcontractor.Salesorg;
+    workflowContext.salesorg = SubContractorInfo.Salesorg;
     workflowContext.distrchan = dataOrderInfo[0].DistrChan;
     workflowContext.division = dataOrderInfo[0].Division;
-    workflowContext.shipto = dataOrderInfo[0].subcontractor.customerID;
+    workflowContext.shipto = SubContractorInfo.customerID;
     workflowContext.requestno = dataOrderInfo[0].RequestNo;
-    workflowContext.bname = dataOrderInfo[0].placedBy;
-    workflowContext.requestedby = dataOrderInfo[0].placedBy;
+    workflowContext.bname = dataOrderInfo[0].placedBy.split('@')[0];
+    workflowContext.requestedby = dataOrderInfo[0].placedBy.split('@')[0];
     workflowContext.imreqdate = dataOrderInfo[0].ImReqDate;
     workflowContext.processingtype = "3";
     workflowContext.appidimp = "";
     workflowContext.delivery = "";
-    workflowContext.orderdate = dataOrderInfo[0].orderDate.split('T')[0];
-    workflowContext.approvername = dataOrderInfo[0].subcontractor.approverName;
-    workflowContext.approveremail = dataOrderInfo[0].subcontractor.approverEmailId;
+    workflowContext.orderdate = dataOrderInfo[0].orderDate.split('T')[0].toString();
+    workflowContext.approvername = SubContractorInfo.approverName;
+    workflowContext.approveremailid = SubContractorInfo.approverEmailId;
     workflowContext.items = dataOrderInfo[0].items.map(item => ({
-      UoM: item.UoM,
-      RequestNo:item.RequestNo,
+      Uom: item.Uom,
+      RequestNo:item.RequestNo_RequestNo,
       Itemno : item.Itemno,
       Plant:item.Plant,
       MatCode: item.MatCode,
       MatText: item.MatText,
-      ReqQty: item.ReqQty,
-      IssQty: item.IssQty,
+      ReqQty: item.ReqQty.toString(),
+      IssQty: item.IssQty.toString(),
       PrjCode: item.PrjCode,
       SeqCode: item.SeqCode,
     }));
@@ -469,7 +488,7 @@ module.exports = async function () {
       let sbpaWorkflowResponse = await utilitySBPA.createOrderApprovalProcess(workflowContext);
 
       // Update the Order with workflowInstanceId
-      await UPDATE.entity(Orders).where({ RequestNo: orderID }).set({
+      await UPDATE.entity(Orders).where({ RequestNo: RequestNo}).set({
         workflowInstanceId: sbpaWorkflowResponse.id
       });
 
@@ -485,38 +504,53 @@ module.exports = async function () {
 });
 
 this.on("getWorkflowStatus", async (req) => {
-  const orderID = req.data.RequestNo;
-
-  let orderData = await SELECT.one.from(Orders).where({ RequestNo: orderID });
-
-  if (!orderData || !orderData.workflowInstanceId) {
-      req.error({
-          code: 'Order-Not-Found',
-          message: 'Order or associated workflow not found.',
-          status: 404
-      });
-      return;
-  }
-
   try {
-      // Retrieve the status of the workflow from SBPA
-      let workflowStatus = await utilitySBPA.getOrderApprovalProcess(orderData.workflowInstanceId);
+    // Retrieve all orders where workflowInstanceId is present
+    let orders = await SELECT.from(Orders).where({ workflowInstanceId: { '!=': null } });
 
-      //req.reply(workflowStatus);
-      // Update the approvalStatus in the Orders entity
-      await UPDATE(Orders)
-        .set({ approvalStatus: workflowStatus.status })
-        .where({ RequestNo: orderID });
-
-      console.log(workflowStatus);
-      return workflowStatus;
-  } catch (error) {
-      console.error('Error fetching workflow status:', error);
+    if (!orders || orders.length === 0) {
       req.error({
-          code: 'Workflow-Status-Fetch-Failed',
-          message: 'Failed to fetch the workflow status.',
-          status: 500
+        code: 'Orders-Not-Found',
+        message: 'No orders with workflow instances found.',
+        status: 404
       });
+      return [];
+    }
+
+    // Array to store status updates
+    let statusUpdates = [];
+
+    // Iterate through all orders and fetch workflow status
+    for (const order of orders) {
+      try {
+        let workflowStatus = await utilitySBPA.getOrderApprovalProcess(order.workflowInstanceId);
+
+        // Update the approvalStatus in the Orders entity
+        await UPDATE(Orders)
+          .set({ approvalStatus: workflowStatus.status })
+          .where({ RequestNo: order.RequestNo });
+
+        // Add the order and its status to the statusUpdates array
+        statusUpdates.push({
+          RequestNo: order.RequestNo,
+          approvalStatus: workflowStatus.status
+        });
+
+      } catch (error) {
+        console.error(`Error fetching workflow status for Order ${order.RequestNo}:`, error);
+      }
+    }
+
+    // Return the status updates for all processed orders
+    return statusUpdates;
+
+  } catch (error) {
+    console.error('Error fetching orders or workflow statuses:', error);
+    req.error({
+      code: 'Workflow-Status-Fetch-Failed',
+      message: 'Failed to fetch workflow statuses for orders.',
+      status: 500
+    });
   }
 });
 

@@ -27,13 +27,14 @@ service SubConService @(path:'/cart') {
   entity Z_SUBC_MATNR_C as projection on Material.Z_SUBC_MATNR_C;
   entity Z_SUBC_CUST_C as projection on Customer.Z_SUBC_CUST_C;
   entity MRApprovals as projection on db.MRApprovals;
+  entity OrderStatusResult as projection on db.OrderStatusResult;
   entity SubContractorDetails as projection on db.SubContractorDetails;
   entity Departments as projection on db.Departments;
   entity ZAPI_001_RFC_SUBCON_REQ_POST_SRV as projection on DO.SubconRequestSet;
-  action requestMaterial(  materialCode: String,quantity : String, wbsNo:String,requirementDate:DateTime);
+  action requestMaterial(  materialCode: String,quantity : String, wbsNo:String,requirementDate:DateTime,loggedInUserId:String);
   action clearCart();
   action placeOrder();
-  action getWorkflowStatus(orderID:UUID);
-  action setplantProjectDeptDetails(customerID:String, customerName:String, plant : String, projectCode: String, department :String, vkOrg:String);
+  action getWorkflowStatus();
+  action setplantProjectDeptDetails(customerID:String, customerName:String, plant : String, projectCode: String, department :String, vkOrg:String,loggedInUserId:String);
   action createDO();
 }

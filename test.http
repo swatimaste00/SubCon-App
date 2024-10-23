@@ -47,15 +47,16 @@ Content-Type: application/json
   "requirementDate":"2024-11-01T12:00:00Z"
 }
 
+
 ### Add Another Item to Cart
-POST https://gamification-qga2hkdu-dev-subcon-app-srv.cfapps.eu20.hana.ondemand.com/cart/requestMaterial
+POST http://localhost:38845/cart/requestMaterial
 Content-Type: application/json
 
 {
-  "materialCode": "M2",
+  "materialCode": "ABRA-011-01-0003",
   "quantity": "10",
-  "wbsNo": "WBS002",
-  "requirementdate":"2024-08-31"
+  "wbsNo": "ST04800.T.E00001",
+  "requirementDate":"2024-11-01T12:00:00Z"
 }
 
 
@@ -65,8 +66,14 @@ Content-Type: application/json
 
 {}
 
+###
+POST https://kuok--singapore--limited-devksl-3bk1u0k3-dev-subcon-app-srv.cfapps.ap11.hana.ondemand.com/cart/getWorkflowStatus
+Content-Type: application/json
+
+{}
+
 ### Retrieve Orders
-GET http://localhost:4004/cart/Orders
+GET https://kuok--singapore--limited-devksl-3bk1u0k3-dev-subcon-app-srv.cfapps.ap11.hana.ondemand.com/cart/getWorkflowStatus
 
 ### Retrieve Order Items
 GET http://localhost:4004/cart/OrderItems
